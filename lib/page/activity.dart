@@ -13,7 +13,8 @@ class _ActivityPageState extends State<ActivityPage> {
   List<Event> _events = new List();
   int pages = 0;
 
-  _ActivityPageState() {
+  @override
+  void initState() {
     _loadMoreData();
   }
 
@@ -23,7 +24,6 @@ class _ActivityPageState extends State<ActivityPage> {
         .listEventsPerformedByUser(currentUser.login)
         .listen((e) {
       setState(() {
-        print(e);
         _events.add(e);
       });
     });

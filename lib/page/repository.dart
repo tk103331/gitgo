@@ -12,8 +12,8 @@ class _RepositoryPageState extends State<RepositoryPage> {
   List<github.Repository> _repositories = new List();
 
   @override
-  initState() async {
-    return _loadMoreData();
+  void initState() {
+    _loadMoreData();
   }
 
   _loadMoreData() {

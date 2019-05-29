@@ -10,7 +10,8 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   List<github.Notification> _notifications = new List();
 
-  initState() {
+  @override
+  void initState() {
     _loadMoreData();
   }
 

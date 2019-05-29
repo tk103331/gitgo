@@ -9,8 +9,9 @@ class IssuePage extends StatefulWidget {
 
 class _IssuePageState extends State<IssuePage> {
   List<github.Issue> _issues = new List();
+
   @override
-  initState() {
+  void initState() {
     _loadMoreData();
   }
 
