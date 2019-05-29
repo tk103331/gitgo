@@ -12,6 +12,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   void initState() {
+    super.initState();
     _loadMoreData();
   }
 
@@ -25,10 +26,13 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Widget _createItem(BuildContext context, int index) {
     if (index < _notifications.length) {
+      if (index == _notifications.length - 1) {
+        _loadMoreData();
+      }
       var n = _notifications[index];
       return ListTile(title: Text(n.subject?.title ?? "AAA"));
     } else {
-      _loadMoreData();
+      return CircularProgressIndicator();
     }
   }
 

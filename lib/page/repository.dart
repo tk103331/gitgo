@@ -13,6 +13,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
 
   @override
   void initState() {
+    super.initState();
     _loadMoreData();
   }
 
@@ -27,12 +28,11 @@ class _RepositoryPageState extends State<RepositoryPage> {
   }
 
   Widget _createItem(BuildContext context, int index) {
-    if (index < _repositories.length) {
-      var repo = _repositories[index];
-      return ListTile(title: Text(repo.name));
-    } else {
+    if (index >= _repositories.length - 1) {
       _loadMoreData();
     }
+    var repo = _repositories[index];
+    return ListTile(title: Text(repo.name));
   }
 
   @override

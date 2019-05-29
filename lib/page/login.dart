@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gitgo/page/home.dart';
-import '../api/base.dart';
 import '../api/auth.dart';
 import '../common/config.dart';
 

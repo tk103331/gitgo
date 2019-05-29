@@ -15,6 +15,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   void initState() {
+    super.initState();
     _loadMoreData();
   }
 

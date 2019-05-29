@@ -12,6 +12,7 @@ class _IssuePageState extends State<IssuePage> {
 
   @override
   void initState() {
+    super.initState();
     _loadMoreData();
   }
 
@@ -24,12 +25,11 @@ class _IssuePageState extends State<IssuePage> {
   }
 
   Widget _createItem(BuildContext context, int index) {
-    if (index < _issues.length) {
-      var issue = _issues[index];
-      return ListTile(title: Text(issue.title));
-    } else {
+    if (index >= _issues.length - 1) {
       _loadMoreData();
     }
+    var issue = _issues[index];
+    return ListTile(title: Text(issue.title));
   }
 
   @override
