@@ -20,7 +20,7 @@ class _ActivityPageState extends State<ActivityPage> {
   _loadMoreData() {
     pages++;
     defaultClient.activity
-        .listPublicEventsPerformedByUser(currentUser.login)
+        .listEventsPerformedByUser(currentUser.login)
         .listen((e) {
       setState(() {
         print(e);
