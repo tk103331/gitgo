@@ -44,6 +44,8 @@ class _HomePageState extends State<HomePage> {
         return BookmarkPage();
       case Pages.Search:
         return SearchPage();
+      case Pages.TrendingRepo:
+        return RepositoryPage(Repos.Trending);
       default:
         return Center(
           child: Text("Open page from drawer."),

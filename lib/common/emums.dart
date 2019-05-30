@@ -14,4 +14,4 @@ enum Pages {
   GlobalActivity
 }
 
-enum Repos { Mine, Starred }
+enum Repos { Mine, Starred, Trending}

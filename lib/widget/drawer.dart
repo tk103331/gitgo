@@ -75,6 +75,13 @@ class NavDrawer extends StatelessWidget {
             _navTo(Pages.Search);
           },
         ),
+        ListTile(
+          leading: Icon(Icons.trending_up),
+          title: Text("趋势"),
+          onTap: () {
+            _navTo(Pages.TrendingRepo);
+          },
+        ),
       ],
     ));
   }

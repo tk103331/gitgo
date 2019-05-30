@@ -27,17 +27,38 @@ class _RepositoryPageState extends State<RepositoryPage> {
   }
 
   _loadData() {
-    if (_repos == Repos.Mine) {
-      defaultClient.repositories
-          .listUserRepositories(currentUser.login)
-          .listen((n) {
-        setState(() {
-          _repositories.add(n);
+    switch (_repos) {
+      case Repos.Mine:
+        defaultClient.repositories
+            .listUserRepositories(currentUser.login)
+            .listen((n) {
+          setState(() {
+            _repositories.add(n);
+          });
         });
-      });
-    } else {
-      // TODO starred repos
+        break;
+      case Repos.Starred:
+        //TODO starred
+        defaultClient.repositories.listRepositories(type: "private").listen((n) {
+          setState(() {
+            _repositories.add(n);
+          });
+        });
+        break;
+      case Repos.Trending:
+        //TODO trending
+        defaultClient.repositories.listRepositories(type: "public").listen((n) {
+          setState(() {
+            _repositories.add(n);
+          });
+        });
+        break;
     }
+
+    if (_repos == Repos.Mine) {
+    } else if (_repos == Repos.Starred) {
+    } else if (_repos == Repos.Starred) {
+    } else {}
   }
 
   Widget _createItem(BuildContext context, int index) {
@@ -54,8 +75,9 @@ class _RepositoryPageState extends State<RepositoryPage> {
         children: <Widget>[Text(repo.name), Text(repo.language ?? "")],
       ),
       subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(repo.description?.trim() ?? ""),
+          Text(repo.description?.trim() ?? "", softWrap: true),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
