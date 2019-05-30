@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(appTitle),
       ),
-      drawer: NavDrawer(),
+      drawer: NavDrawer(navTo),
       body: _createBody(),
     );
   }

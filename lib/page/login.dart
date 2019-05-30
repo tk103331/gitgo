@@ -4,25 +4,27 @@ import '../api/auth.dart';
 import '../common/config.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
+  Function _onSuccess;
+  LoginPage(this._onSuccess, {Key key}) : super(key: key);
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState(_onSuccess);
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Function _onSuccess;
   String _username = "";
   String _password = "";
 
   String _avatarUrl = "";
   String _statusText = "";
 
+  _LoginPageState(this._onSuccess) : super();
+
   void _login() async {
     var success = await login(_username, _password);
 
     if (success) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return HomePage();
-      }));
+      _onSuccess();
     }
   }
 
@@ -42,7 +44,8 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             avatarImage(),
             TextField(
