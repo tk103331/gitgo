@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github/server.dart' as github;
+
 import '../api/base.dart';
 
 class IssuePage extends StatefulWidget {
@@ -13,10 +14,10 @@ class _IssuePageState extends State<IssuePage> {
   @override
   void initState() {
     super.initState();
-    _loadMoreData();
+    _loadData();
   }
 
-  _loadMoreData() {
+  _loadData() {
     defaultClient.issues.listAll().listen((n) {
       setState(() {
         _issues.add(n);
@@ -25,9 +26,6 @@ class _IssuePageState extends State<IssuePage> {
   }
 
   Widget _createItem(BuildContext context, int index) {
-    if (index >= _issues.length - 1) {
-      _loadMoreData();
-    }
     var issue = _issues[index];
     return ListTile(title: Text(issue.title));
   }

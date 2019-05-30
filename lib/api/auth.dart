@@ -1,6 +1,7 @@
-import 'base.dart';
 import 'package:github/server.dart';
+
 import '../common/config.dart';
+import 'base.dart';
 
 Future<bool> login(String username, String password) async {
   var client =

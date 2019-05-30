@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/page/home.dart';
+
 import '../api/auth.dart';
 import '../common/config.dart';
 
 class LoginPage extends StatefulWidget {
   Function _onSuccess;
+
   LoginPage(this._onSuccess, {Key key}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState(_onSuccess);
 }

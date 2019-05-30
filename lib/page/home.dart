@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../widget/drawer.dart';
 import '../common/config.dart';
-import '../common/pages.dart';
+import '../common/emums.dart';
+import '../widget/drawer.dart';
 import 'activity.dart';
+import 'bookmark.dart';
 import 'issue.dart';
 import 'notification.dart';
+import 'profile.dart';
 import 'repository.dart';
+import 'search.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -31,12 +34,21 @@ class _HomePageState extends State<HomePage> {
         return IssuePage();
       case Pages.Notification:
         return NotificationPage();
-      case Pages.Repository:
-        return RepositoryPage();
+      case Pages.MineRepo:
+        return RepositoryPage(Repos.Mine);
+      case Pages.StarredRepo:
+        return RepositoryPage(Repos.Starred);
+      case Pages.Profile:
+        return ProfilePage();
+      case Pages.Bookmark:
+        return BookmarkPage();
+      case Pages.Search:
+        return SearchPage();
+      default:
+        return Center(
+          child: Text("Open page from drawer."),
+        );
     }
-    return Center(
-      child: Text("Open page from drawer."),
-    );
   }
 
   @override

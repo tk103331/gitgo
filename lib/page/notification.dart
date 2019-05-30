@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../api/base.dart';
 import 'package:github/server.dart' as github;
+
+import '../api/base.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -13,10 +14,10 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   void initState() {
     super.initState();
-    _loadMoreData();
+    _loadData();
   }
 
-  _loadMoreData() {
+  _loadData() {
     defaultClient.activity.listNotifications().listen((n) {
       setState(() {
         _notifications.add(n);
@@ -25,15 +26,8 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Widget _createItem(BuildContext context, int index) {
-    if (index < _notifications.length) {
-      if (index == _notifications.length - 1) {
-        _loadMoreData();
-      }
-      var n = _notifications[index];
-      return ListTile(title: Text(n.subject?.title ?? "AAA"));
-    } else {
-      return CircularProgressIndicator();
-    }
+    var n = _notifications[index];
+    return ListTile(title: Text(n.subject?.title ?? "AAA"));
   }
 
   @override

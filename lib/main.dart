@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gitgo/page/home.dart';
 import 'package:gitgo/page/start.dart';
-import 'page/login.dart';
+
 import 'common/config.dart';
+import 'page/login.dart';
 
 void main() => runApp(MyApp());
 
