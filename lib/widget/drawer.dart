@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/common/pages.dart';
 import '../page/notification.dart';
 import '../page/activity.dart';
 import '../page/issue.dart';
@@ -20,32 +21,32 @@ class NavDrawer extends StatelessWidget {
         FlatButton(
           child: Text("动态"),
           onPressed: () {
-            _navTo(ActivityPage());
+            _navTo(Pages.Activity);
           },
         ),
         FlatButton(
           child: Text("通知"),
           onPressed: () {
-            _navTo(NotificationPage());
+            _navTo(Pages.Notification);
           },
         ),
         FlatButton(
           child: Text("问题"),
           onPressed: () {
-            _navTo(IssuePage());
+            _navTo(Pages.Issue);
           },
         ),
         Divider(),
         FlatButton(
           child: Text("我的版本库"),
           onPressed: () {
-            _navTo(RepositoryPage());
+            _navTo(Pages.Repository);
           },
         ),
         FlatButton(
           child: Text("星标版本库"),
           onPressed: () {
-            _navTo(RepositoryPage());
+            _navTo(Pages.Repository);
           },
         ),
       ],

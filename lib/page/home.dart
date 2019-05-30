@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/page/activity.dart';
-import 'package:gitgo/widget/drawer.dart';
+
+import '../widget/drawer.dart';
 import '../common/config.dart';
+import '../common/pages.dart';
+import 'activity.dart';
+import 'issue.dart';
+import 'notification.dart';
+import 'repository.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,18 +14,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _bodyName = "activity";
+  Pages _body = Pages.Activity;
 
-  navTo(Widget body) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return body;
-    }));
+  navTo(Pages page) {
+    setState(() {
+      _body = page;
+    });
+    Navigator.pop(context);
   }
 
   _createBody() {
-    switch (_bodyName) {
-      case "activity":
+    switch (_body) {
+      case Pages.Activity:
         return ActivityPage();
+      case Pages.Issue:
+        return IssuePage();
+      case Pages.Notification:
+        return NotificationPage();
+      case Pages.Repository:
+        return RepositoryPage();
     }
     return Center(
       child: Text("Open page from drawer."),
