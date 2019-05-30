@@ -31,10 +31,14 @@ class _ActivityPageState extends State<ActivityPage> {
   }
 
   Widget _createItem(BuildContext context, int i) {
-    if (i >= _events.length - 1) {
+    if(i % 2 ==1) {
+      return Divider();
+    }
+    int index = i~/2;
+    if (index >= _events.length - 1) {
       _loadMoreData();
     }
-    var e = _events[i];
+    var e = _events[index];
     return Container(
         decoration: BoxDecoration(
             color: Colors.white70,
@@ -61,6 +65,6 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: _events.length, itemBuilder: _createItem);
+        itemCount: _events.length*2, itemBuilder: _createItem);
   }
 }
