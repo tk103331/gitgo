@@ -39,7 +39,9 @@ class _RepositoryPageState extends State<RepositoryPage> {
         break;
       case Repos.Starred:
         //TODO starred
-        defaultClient.repositories.listRepositories(type: "private").listen((n) {
+        defaultClient.repositories
+            .listRepositories(type: "private")
+            .listen((n) {
           setState(() {
             _repositories.add(n);
           });
@@ -54,11 +56,6 @@ class _RepositoryPageState extends State<RepositoryPage> {
         });
         break;
     }
-
-    if (_repos == Repos.Mine) {
-    } else if (_repos == Repos.Starred) {
-    } else if (_repos == Repos.Starred) {
-    } else {}
   }
 
   Widget _createItem(BuildContext context, int index) {
@@ -101,10 +98,16 @@ class _RepositoryPageState extends State<RepositoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: Colors.white),
-      child: ListView.builder(
-          itemCount: _repositories.length * 2, itemBuilder: _createItem),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("问题"),
+      ),
+      drawer: MainDrawer,
+      body: Container(
+        decoration: BoxDecoration(color: Colors.white),
+        child: ListView.builder(
+            itemCount: _repositories.length * 2, itemBuilder: _createItem),
+      ),
     );
   }
 }

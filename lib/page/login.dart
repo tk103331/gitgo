@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
-
+import '../common/emums.dart';
 import '../api/auth.dart';
 import '../common/config.dart';
 
 class LoginPage extends StatefulWidget {
-  Function _onSuccess;
-
-  LoginPage(this._onSuccess, {Key key}) : super(key: key);
-
   @override
-  _LoginPageState createState() => _LoginPageState(_onSuccess);
+  _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Function _onSuccess;
   String _username = "";
   String _password = "";
 
   String _avatarUrl = "";
   String _statusText = "";
 
-  _LoginPageState(this._onSuccess) : super();
-
-  void _login() async {
+  void _login(BuildContext context) async {
     var success = await login(_username, _password);
 
     if (success) {
-      _onSuccess();
+      Navigator.of(context).pushReplacementNamed(Pages.Profile.toString());
     }
   }
 
@@ -70,7 +63,9 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 RaisedButton(
                   child: Text("Login"),
-                  onPressed: _login,
+                  onPressed: () {
+                    _login(context);
+                  },
                 )
               ],
             ),

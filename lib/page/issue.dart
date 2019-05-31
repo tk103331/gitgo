@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../common/config.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
@@ -32,10 +33,16 @@ class _IssuePageState extends State<IssuePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: Colors.white),
-      child:
-          ListView.builder(itemCount: _issues.length, itemBuilder: _createItem),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("问题"),
+      ),
+      drawer: MainDrawer,
+      body: Container(
+        decoration: BoxDecoration(color: Colors.white),
+        child: ListView.builder(
+            itemCount: _issues.length, itemBuilder: _createItem),
+      ),
     );
   }
 }

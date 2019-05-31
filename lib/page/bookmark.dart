@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../common/config.dart';
 
 class BookmarkPage extends StatefulWidget {
   @override
@@ -8,9 +9,15 @@ class BookmarkPage extends StatefulWidget {
 class _BookmarkPageState extends State<BookmarkPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("Bookmark"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("书签"),
+      ),
+      drawer: MainDrawer,
+      body: Container(
+        child: Center(
+          child: Text("书签"),
+        ),
       ),
     );
   }

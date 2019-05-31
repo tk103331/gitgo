@@ -31,10 +31,10 @@ class _ActivityPageState extends State<ActivityPage> {
   }
 
   Widget _createItem(BuildContext context, int i) {
-    if(i % 2 ==1) {
+    if (i % 2 == 1) {
       return Divider();
     }
-    int index = i~/2;
+    int index = i ~/ 2;
     if (index >= _events.length - 1) {
       _loadMoreData();
     }
@@ -64,7 +64,13 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: _events.length*2, itemBuilder: _createItem);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("个人主页"),
+      ),
+      drawer: MainDrawer,
+      body: ListView.builder(
+          itemCount: _events.length * 2, itemBuilder: _createItem),
+    );
   }
 }

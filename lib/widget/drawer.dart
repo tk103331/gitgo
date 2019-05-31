@@ -4,9 +4,7 @@ import 'package:gitgo/common/emums.dart';
 import '../common/config.dart';
 
 class NavDrawer extends StatelessWidget {
-  final Function _navTo;
-
-  NavDrawer(this._navTo);
+  const NavDrawer();
 
   @override
   Widget build(BuildContext context) {
@@ -19,30 +17,33 @@ class NavDrawer extends StatelessWidget {
             currentAccountPicture: Image.network(currentUser.avatarUrl)),
         ListTile(
           leading: Icon(Icons.account_circle),
-          title: Text("主页"),
+          title: Text("个人主页"),
           onTap: () {
-            _navTo(Pages.Profile);
+            Navigator.of(context)
+                .pushReplacementNamed(Pages.Profile.toString());
           },
         ),
         ListTile(
           leading: Icon(Icons.camera),
           title: Text("动态"),
           onTap: () {
-            _navTo(Pages.Activity);
+            Navigator.of(context)
+                .pushReplacementNamed(Pages.Activity.toString());
           },
         ),
         ListTile(
           leading: Icon(Icons.add_alert),
           title: Text("通知"),
           onTap: () {
-            _navTo(Pages.Notification);
+            Navigator.of(context)
+                .pushReplacementNamed(Pages.Notification.toString());
           },
         ),
         ListTile(
           leading: Icon(Icons.live_help),
           title: Text("问题"),
           onTap: () {
-            _navTo(Pages.Issue);
+            Navigator.of(context).pushReplacementNamed(Pages.Issue.toString());
           },
         ),
         Divider(),
@@ -50,21 +51,24 @@ class NavDrawer extends StatelessWidget {
           leading: Icon(Icons.book),
           title: Text("我的版本库"),
           onTap: () {
-            _navTo(Pages.MineRepo);
+            Navigator.of(context)
+                .pushReplacementNamed(Pages.MineRepo.toString());
           },
         ),
         ListTile(
           leading: Icon(Icons.star),
           title: Text("星标版本库"),
           onTap: () {
-            _navTo(Pages.StarredRepo);
+            Navigator.of(context)
+                .pushReplacementNamed(Pages.StarredRepo.toString());
           },
         ),
         ListTile(
           leading: Icon(Icons.bookmark),
           title: Text("书签"),
           onTap: () {
-            _navTo(Pages.Bookmark);
+            Navigator.of(context)
+                .pushReplacementNamed(Pages.Bookmark.toString());
           },
         ),
         Divider(),
@@ -72,14 +76,15 @@ class NavDrawer extends StatelessWidget {
           leading: Icon(Icons.search),
           title: Text("搜索"),
           onTap: () {
-            _navTo(Pages.Search);
+            Navigator.of(context).pushReplacementNamed(Pages.Search.toString());
           },
         ),
         ListTile(
           leading: Icon(Icons.trending_up),
           title: Text("趋势"),
           onTap: () {
-            _navTo(Pages.TrendingRepo);
+            Navigator.of(context)
+                .pushReplacementNamed(Pages.TrendingRepo.toString());
           },
         ),
       ],

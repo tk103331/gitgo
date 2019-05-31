@@ -1,4 +1,7 @@
 enum Pages {
+  Home,
+  Start,
+  Login,
   Profile,
   Activity,
   Issue,
@@ -14,4 +17,4 @@ enum Pages {
   GlobalActivity
 }
 
-enum Repos { Mine, Starred, Trending}
+enum Repos { Mine, Starred, Trending }

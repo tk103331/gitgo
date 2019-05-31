@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../common/config.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -8,9 +9,15 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("Profile"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("个人主页"),
+      ),
+      drawer: MainDrawer,
+      body: Container(
+        child: Center(
+          child: Text("个人主页"),
+        ),
       ),
     );
   }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/page/home.dart';
-import 'package:gitgo/page/start.dart';
+import 'package:gitgo/page/login.dart';
+import 'common/emums.dart';
+import 'common/route.dart';
+import 'page/start.dart';
 
 import 'common/config.dart';
-import 'page/login.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: appTitle,
       home: MainPage(),
+      routes: Routes,
     );
   }
 }
@@ -23,31 +25,21 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  bool _start = true;
-  bool _logined = false;
   Widget _body = StartPage();
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 3)).then((a) {
+      print(Pages.Login.toString());
 
-  void _onLogin() {
-    setState(() {
-      _logined = true;
-      _body = HomePage();
+      setState(() {
+        _body = LoginPage();
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_start) {
-      Future.delayed(Duration(seconds: 3)).then((a) {
-        setState(() {
-          _start = false;
-          if (_logined) {
-            _body = HomePage();
-          } else {
-            _body = LoginPage(_onLogin);
-          }
-        });
-      });
-    }
     return _body;
   }
 }

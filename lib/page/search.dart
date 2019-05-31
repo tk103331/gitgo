@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../common/config.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -8,8 +9,16 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(child: Text("Search")),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("搜索"),
+      ),
+      drawer: MainDrawer,
+      body: Container(
+        child: Center(
+          child: Text("搜索"),
+        ),
+      ),
     );
   }
 }

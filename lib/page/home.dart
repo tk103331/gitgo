@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../common/config.dart';
 import '../common/emums.dart';
-import '../widget/drawer.dart';
 import 'activity.dart';
 import 'bookmark.dart';
 import 'issue.dart';
@@ -59,7 +58,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(appTitle),
       ),
-      drawer: NavDrawer(navTo),
+      drawer: MainDrawer,
       body: _createBody(),
     );
   }
