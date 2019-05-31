@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             avatarImage(),
             TextField(
-              decoration: InputDecoration(labelText: "Username"),
+              decoration: InputDecoration(labelText: "用户名"),
               onChanged: (String val) {
                 setState(() {
                   _username = val;
@@ -52,7 +52,8 @@ class _LoginPageState extends State<LoginPage> {
               },
             ),
             TextField(
-              decoration: InputDecoration(labelText: "Password"),
+              decoration: InputDecoration(labelText: "密码"),
+              obscureText: true,
               onChanged: (String val) {
                 setState(() {
                   _password = val;
@@ -62,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
             ButtonBar(
               children: <Widget>[
                 RaisedButton(
-                  child: Text("Login"),
+                  child: Text("登陆"),
                   onPressed: () {
                     _login(context);
                   },
