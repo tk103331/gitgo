@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/widget/activity_item.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
@@ -39,34 +40,14 @@ class _ActivityPageState extends State<ActivityPage> {
       _loadMoreData();
     }
     var e = _events[index];
-    return Container(
-        decoration: BoxDecoration(
-            color: Colors.white70,
-            border: Border(top: BorderSide(color: Colors.white, width: 3.0))),
-        padding: EdgeInsets.all(2),
-        child: ListTile(
-          title: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.network(e.actor?.avatarUrl ?? "", width: 32, height: 32),
-              Text(e.actor.login ?? ""),
-              Text(e.createdAt?.toLocal().toString() ?? "")
-            ],
-          ),
-          subtitle: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Text(e.type ?? ""), Text(e.repo.name ?? "")],
-          ),
-        ));
+    return ActivityListItem(e);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("个人主页"),
+        title: Text("活动"),
       ),
       drawer: MainDrawer,
       body: ListView.builder(

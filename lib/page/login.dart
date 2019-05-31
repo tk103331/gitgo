@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
     var success = await login(_username, _password);
 
     if (success) {
-      Navigator.of(context).pushReplacementNamed(Pages.Profile.toString());
+      Navigator.of(context).pushReplacementNamed(Pages.Activity.toString());
     }
   }
 

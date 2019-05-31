@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:github/server.dart';
+
 import '../api/base.dart';
 import '../common/config.dart';
+import '../widget/repo_item.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -51,37 +53,7 @@ class _SearchPageState extends State<SearchPage> {
       return Divider();
     }
     var repo = _repos[index ~/ 2];
-    return ListTile(
-      leading: CircleAvatar(
-        child: Image.network(repo.owner.avatarUrl),
-      ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[Text(repo.name), Text(repo.language ?? "")],
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(repo.description?.trim() ?? "", softWrap: true),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Icon(Icons.star, size: 14),
-              Expanded(
-                child: Text(repo.stargazersCount?.toString() ?? "0"),
-              ),
-              Icon(Icons.call_split, size: 14),
-              Expanded(
-                child: Text(repo.forksCount?.toString() ?? "0"),
-              ),
-              Icon(Icons.account_circle, size: 14),
-              Text(repo.owner?.login ?? "")
-            ],
-          )
-        ],
-      ),
-      onTap: () {},
-    );
+    return RepoListItem(repo);
   }
 
   List<Widget> _createActions() {

@@ -4,6 +4,7 @@ import 'package:github/server.dart' as github;
 import '../api/base.dart';
 import '../common/config.dart';
 import '../common/emums.dart';
+import '../widget/repo_item.dart';
 
 class RepositoryPage extends StatefulWidget {
   final Repos _repos;
@@ -63,37 +64,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
       return Divider();
     }
     var repo = _repositories[index ~/ 2];
-    return ListTile(
-      leading: CircleAvatar(
-        child: Image.network(repo.owner.avatarUrl),
-      ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[Text(repo.name), Text(repo.language ?? "")],
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(repo.description?.trim() ?? "", softWrap: true),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Icon(Icons.star, size: 14),
-              Expanded(
-                child: Text(repo.stargazersCount?.toString() ?? "0"),
-              ),
-              Icon(Icons.call_split, size: 14),
-              Expanded(
-                child: Text(repo.forksCount?.toString() ?? "0"),
-              ),
-              Icon(Icons.account_circle, size: 14),
-              Text(repo.owner?.login ?? "")
-            ],
-          )
-        ],
-      ),
-      onTap: () {},
-    );
+    return RepoListItem(repo);
   }
 
   @override
