@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gitgo/page/login.dart';
+import 'api/auth.dart';
 import 'common/emums.dart';
 import 'common/route.dart';
 import 'page/start.dart';
 
 import 'common/config.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -29,9 +31,18 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3)).then((a) {
-      print(Pages.Login.toString());
 
+    Future.delayed(Duration(seconds: 1)).then((a) async{
+      var refs = await SharedPreferences.getInstance();
+      var user = refs.getString("username");
+      var pswd = refs.getString("password");
+      if(user != null && user.isNotEmpty && pswd != null && pswd.isNotEmpty ) {
+        var success = await login(user, pswd);
+        if (success) {
+          Navigator.of(context).pushNamed(Pages.Activity.toString());
+          return;
+        }
+      }
       setState(() {
         _body = LoginPage();
       });
