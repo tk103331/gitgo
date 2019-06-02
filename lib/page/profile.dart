@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
@@ -14,24 +15,34 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   User _user = null;
   List<Event> _events = List();
+  bool _eventLoaded = false;
   List<Repository> _repos = List();
+  bool _repoLoaded = false;
 
   @override
   void didChangeDependencies() {
     _user = ModalRoute.of(context).settings.arguments as User;
-    defaultClient.activity
-        .listEventsPerformedByUser(_user.login)
-        .listen((event) {
-      setState(() {
-        _events.add(event);
-      });
-    });
-    defaultClient.repositories.listRepositories().listen((repo) {
-      setState(() {
-        _repos.add(repo);
-      });
-    });
+    _loadEventData();
+    _loadRepoData();
     super.didChangeDependencies();
+  }
+
+  void _loadEventData() async {
+    var list = await defaultClient.activity
+        .listEventsPerformedByUser(_user.login)
+        .toList();
+    setState(() {
+      _events.addAll(list);
+      _eventLoaded = true;
+    });
+  }
+
+  void _loadRepoData() async {
+    var list = await defaultClient.repositories.listRepositories().toList();
+    setState(() {
+      _repos.addAll(list);
+      _repoLoaded = true;
+    });
   }
 
   Widget _createCountButton(String name, String count) {
@@ -43,7 +54,6 @@ class _ProfilePageState extends State<ProfilePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[Text(count), Text(name)],
         ),
-
       ),
       onPressed: () {},
     );
@@ -139,12 +149,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ],
                                 )),
                           ),
-                          ListView.builder(
-                              itemCount: _events.length * 2 - 1,
-                              itemBuilder: _createActivityItem),
-                          ListView.builder(
-                              itemCount: _repos.length * 2 - 1,
-                              itemBuilder: _createRepoItem),
+                          IndicatorContainer(
+                            showChild: _eventLoaded,
+                            child: ListView.builder(
+                                itemCount: _events.length * 2 - 1,
+                                itemBuilder: _createActivityItem),
+                          ),
+                          IndicatorContainer(
+                              showChild: _repoLoaded,
+                              child: ListView.builder(
+                                  itemCount: _repos.length * 2 - 1,
+                                  itemBuilder: _createRepoItem))
                         ]),
                       )
                     ],

@@ -19,6 +19,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
   List<github.Repository> _repositories = new List();
   Repos _repos = Repos.Mine;
   String _title = "我的仓库";
+  bool _loaded = false;
 
   _RepositoryPageState(this._repos);
 
@@ -28,43 +29,38 @@ class _RepositoryPageState extends State<RepositoryPage> {
     _loadData();
   }
 
-  _loadData() {
+  _loadData() async{
     switch (_repos) {
       case Repos.Mine:
-        defaultClient.repositories
-            .listUserRepositories(currentUser.login)
-            .listen((n) {
-          setState(() {
-            _repositories.add(n);
-          });
-        });
+        var list = await defaultClient.repositories
+            .listUserRepositories(currentUser.login).toList();
+
         setState(() {
+          _repositories.addAll(list);
+          _loaded = true;
           _title = "我的仓库";
         });
         break;
       case Repos.Starred:
         //TODO starred
-        defaultClient.repositories
-            .listRepositories(type: "private")
-            .listen((n) {
-          setState(() {
-            _repositories.add(n);
-          });
-        });
+        var list = await defaultClient.repositories
+            .listRepositories(type: "private").toList();
+
         setState(() {
+          _repositories.addAll(list);
+          _loaded = true;
           _title = "星标仓库";
         });
         break;
       case Repos.Trending:
         //TODO trending
-        defaultClient.repositories.listRepositories(type: "public").listen((n) {
-          setState(() {
-            _repositories.add(n);
-          });
-        });
+        var list = await defaultClient.repositories.listRepositories(type: "public").toList();
         setState(() {
+          _repositories.addAll(list);
+          _loaded = true;
           _title = "趋势仓库";
         });
+
         break;
     }
   }

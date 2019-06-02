@@ -11,6 +11,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+
   List<Repository> _repos = List();
   List<User> _users = List();
   TextEditingController _textEditingController = TextEditingController();
@@ -35,7 +36,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _createUserItem(BuildContext context, int index) {
-    if (index % 2 == 0) {
+    if (index % 2 == 1) {
       return Divider();
     }
     var user = _users[index ~/ 2];
@@ -49,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _createRepoItem(BuildContext context, int index) {
-    if (index % 2 == 0) {
+    if (index % 2 == 1) {
       return Divider();
     }
     var repo = _repos[index ~/ 2];
@@ -118,11 +119,11 @@ class _SearchPageState extends State<SearchPage> {
                 child: TabBarView(
                   children: <Widget>[
                     ListView.builder(
-                      itemCount: _repos.length * 2,
+                      itemCount: _repos.length * 2 - 1,
                       itemBuilder: _createRepoItem,
                     ),
                     ListView.builder(
-                      itemCount: _users.length * 2,
+                      itemCount: _users.length * 2 - 1,
                       itemBuilder: _createUserItem,
                     )
                   ],

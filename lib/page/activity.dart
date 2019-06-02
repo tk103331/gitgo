@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
@@ -11,8 +12,8 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
+  bool _loaded = false;
   List<Event> _events = new List();
-  int pages = 0;
 
   @override
   void initState() {
@@ -20,14 +21,15 @@ class _ActivityPageState extends State<ActivityPage> {
     _loadMoreData();
   }
 
-  _loadMoreData() {
-    pages++;
-    defaultClient.activity
+  _loadMoreData() async {
+    var list = await defaultClient.activity
         .listEventsPerformedByUser(currentUser.login)
-        .listen((e) {
-      setState(() {
-        _events.add(e);
-      });
+        .toList();
+
+
+    setState(() {
+      _events.addAll(list);
+      _loaded = true;
     });
   }
 
@@ -43,12 +45,14 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("活动"),
-      ),
-      drawer: MainDrawer,
-      body: ListView.builder(
-          itemCount: _events.length * 2 - 1, itemBuilder: _createItem),
-    );
+        appBar: AppBar(
+          title: Text("活动"),
+        ),
+        drawer: MainDrawer,
+        body: IndicatorContainer(
+          showChild: _loaded,
+          child: ListView.builder(
+              itemCount: _events.length * 2 - 1, itemBuilder: _createItem),
+        ));
   }
 }

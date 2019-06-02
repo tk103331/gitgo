@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
@@ -11,6 +12,7 @@ class IssuePage extends StatefulWidget {
 
 class _IssuePageState extends State<IssuePage> {
   List<github.Issue> _issues = new List();
+  bool _loaded = false;
 
   @override
   void initState() {
@@ -18,11 +20,12 @@ class _IssuePageState extends State<IssuePage> {
     _loadData();
   }
 
-  _loadData() {
-    defaultClient.issues.listAll().listen((n) {
-      setState(() {
-        _issues.add(n);
-      });
+  _loadData() async {
+    var list = await defaultClient.issues.listAll().toList();
+
+    setState(() {
+      _issues.addAll(list);
+      _loaded = true;
     });
   }
 
@@ -34,12 +37,14 @@ class _IssuePageState extends State<IssuePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("问题"),
-      ),
-      drawer: MainDrawer,
-      body: ListView.builder(
-          itemCount: _issues.length, itemBuilder: _createItem),
-    );
+        appBar: AppBar(
+          title: Text("问题"),
+        ),
+        drawer: MainDrawer,
+        body: IndicatorContainer(
+          showChild: _loaded,
+          child: ListView.builder(
+              itemCount: _issues.length, itemBuilder: _createItem),
+        ));
   }
 }
