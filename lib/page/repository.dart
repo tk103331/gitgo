@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
@@ -29,11 +30,12 @@ class _RepositoryPageState extends State<RepositoryPage> {
     _loadData();
   }
 
-  _loadData() async{
+  _loadData() async {
     switch (_repos) {
       case Repos.Mine:
         var list = await defaultClient.repositories
-            .listUserRepositories(currentUser.login).toList();
+            .listUserRepositories(currentUser.login)
+            .toList();
 
         setState(() {
           _repositories.addAll(list);
@@ -44,7 +46,8 @@ class _RepositoryPageState extends State<RepositoryPage> {
       case Repos.Starred:
         //TODO starred
         var list = await defaultClient.repositories
-            .listRepositories(type: "private").toList();
+            .listRepositories(type: "private")
+            .toList();
 
         setState(() {
           _repositories.addAll(list);
@@ -54,7 +57,9 @@ class _RepositoryPageState extends State<RepositoryPage> {
         break;
       case Repos.Trending:
         //TODO trending
-        var list = await defaultClient.repositories.listRepositories(type: "public").toList();
+        var list = await defaultClient.repositories
+            .listRepositories(type: "public")
+            .toList();
         setState(() {
           _repositories.addAll(list);
           _loaded = true;
@@ -76,12 +81,15 @@ class _RepositoryPageState extends State<RepositoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_title),
-      ),
-      drawer: MainDrawer,
-      body: ListView.builder(
-          itemCount: _repositories.length * 2 - 1, itemBuilder: _createItem),
-    );
+        appBar: AppBar(
+          title: Text(_title),
+        ),
+        drawer: MainDrawer,
+        body: IndicatorContainer(
+          showChild: _loaded,
+          child: ListView.builder(
+              itemCount: _repositories.length * 2 - 1,
+              itemBuilder: _createItem),
+        ));
   }
 }

@@ -11,7 +11,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-
   List<Repository> _repos = List();
   List<User> _users = List();
   TextEditingController _textEditingController = TextEditingController();

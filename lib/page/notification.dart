@@ -13,18 +13,19 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   List<github.Notification> _notifications = new List();
   bool _loaded = false;
+
   @override
   void initState() {
     super.initState();
     _loadData();
   }
 
-  _loadData() async{
+  _loadData() async {
     var list = await defaultClient.activity.listNotifications().toList();
-      setState(() {
-        _notifications.addAll(list);
-        _loaded = true;
-      });
+    setState(() {
+      _notifications.addAll(list);
+      _loaded = true;
+    });
   }
 
   Widget _createItem(BuildContext context, int index) {

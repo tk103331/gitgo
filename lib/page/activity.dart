@@ -26,7 +26,6 @@ class _ActivityPageState extends State<ActivityPage> {
         .listEventsPerformedByUser(currentUser.login)
         .toList();
 
-
     setState(() {
       _events.addAll(list);
       _loaded = true;
