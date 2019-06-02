@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../common/config.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
+import '../common/config.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -35,7 +35,7 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("问题"),
+        title: Text("通知"),
       ),
       drawer: MainDrawer,
       body: Container(

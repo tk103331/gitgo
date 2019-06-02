@@ -19,8 +19,8 @@ class NavDrawer extends StatelessWidget {
           leading: Icon(Icons.account_circle),
           title: Text("个人主页"),
           onTap: () {
-            Navigator.of(context)
-                .pushReplacementNamed(Pages.Profile.toString(), arguments: currentUser);
+            Navigator.of(context).pushReplacementNamed(Pages.Profile.toString(),
+                arguments: currentUser);
           },
         ),
         ListTile(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../common/config.dart';
 
 class BookmarkPage extends StatefulWidget {

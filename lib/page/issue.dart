@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../common/config.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
+import '../common/config.dart';
 
 class IssuePage extends StatefulWidget {
   @override
@@ -38,11 +38,8 @@ class _IssuePageState extends State<IssuePage> {
         title: Text("问题"),
       ),
       drawer: MainDrawer,
-      body: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: ListView.builder(
-            itemCount: _issues.length, itemBuilder: _createItem),
-      ),
+      body: ListView.builder(
+          itemCount: _issues.length, itemBuilder: _createItem),
     );
   }
 }

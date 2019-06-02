@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-
 import 'package:github/server.dart';
 
 class RepoListItem extends StatelessWidget {
-
   Repository _repo;
+
   RepoListItem(this._repo);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: EdgeInsets.all(0),
       leading: CircleAvatar(
         child: Image.network(_repo.owner.avatarUrl),
       ),
@@ -42,5 +42,3 @@ class RepoListItem extends StatelessWidget {
     );
   }
 }
-
-

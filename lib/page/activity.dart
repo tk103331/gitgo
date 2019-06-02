@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/widget/activity_item.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
 import '../common/config.dart';
+import '../widget/activity_item.dart';
 
 class ActivityPage extends StatefulWidget {
   @override
@@ -36,9 +36,6 @@ class _ActivityPageState extends State<ActivityPage> {
       return Divider();
     }
     int index = i ~/ 2;
-    if (index >= _events.length - 1) {
-      _loadMoreData();
-    }
     var e = _events[index];
     return ActivityListItem(e);
   }
@@ -51,7 +48,7 @@ class _ActivityPageState extends State<ActivityPage> {
       ),
       drawer: MainDrawer,
       body: ListView.builder(
-          itemCount: _events.length * 2, itemBuilder: _createItem),
+          itemCount: _events.length * 2 - 1, itemBuilder: _createItem),
     );
   }
 }

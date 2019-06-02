@@ -18,6 +18,7 @@ class RepositoryPage extends StatefulWidget {
 class _RepositoryPageState extends State<RepositoryPage> {
   List<github.Repository> _repositories = new List();
   Repos _repos = Repos.Mine;
+  String _title = "我的仓库";
 
   _RepositoryPageState(this._repos);
 
@@ -37,6 +38,9 @@ class _RepositoryPageState extends State<RepositoryPage> {
             _repositories.add(n);
           });
         });
+        setState(() {
+          _title = "我的仓库";
+        });
         break;
       case Repos.Starred:
         //TODO starred
@@ -47,6 +51,9 @@ class _RepositoryPageState extends State<RepositoryPage> {
             _repositories.add(n);
           });
         });
+        setState(() {
+          _title = "星标仓库";
+        });
         break;
       case Repos.Trending:
         //TODO trending
@@ -55,12 +62,15 @@ class _RepositoryPageState extends State<RepositoryPage> {
             _repositories.add(n);
           });
         });
+        setState(() {
+          _title = "趋势仓库";
+        });
         break;
     }
   }
 
   Widget _createItem(BuildContext context, int index) {
-    if (index % 2 == 0) {
+    if (index % 2 == 1) {
       return Divider();
     }
     var repo = _repositories[index ~/ 2];
@@ -71,14 +81,11 @@ class _RepositoryPageState extends State<RepositoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("问题"),
+        title: Text(_title),
       ),
       drawer: MainDrawer,
-      body: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: ListView.builder(
-            itemCount: _repositories.length * 2, itemBuilder: _createItem),
-      ),
+      body: ListView.builder(
+          itemCount: _repositories.length * 2 - 1, itemBuilder: _createItem),
     );
   }
 }
