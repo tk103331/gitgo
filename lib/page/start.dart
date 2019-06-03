@@ -6,7 +6,16 @@ class StartPage extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(color: Colors.white),
         child: Center(
-          child: Image.asset("assets/images/octocat.png"),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset("assets/images/octocat.png"),
+              Container(
+                height: 100,
+              ),
+              CircularProgressIndicator()
+            ],
+          ),
         ));
   }
 }

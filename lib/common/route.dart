@@ -9,7 +9,7 @@ import '../page/profile.dart';
 import '../page/repository.dart';
 import '../page/search.dart';
 
-Map<String, WidgetBuilder> Routes = <String, WidgetBuilder>{
+Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Activity.toString(): (context) => ActivityPage(),
   Pages.Bookmark.toString(): (context) => BookmarkPage(),
   Pages.Issue.toString(): (context) => IssuePage(),

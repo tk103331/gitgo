@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
@@ -11,27 +12,40 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  bool _repoLoaded = false;
   List<Repository> _repos = List();
+  bool _userLoaded = false;
   List<User> _users = List();
   TextEditingController _textEditingController = TextEditingController();
   bool _showActions = false;
 
   void _search(String key) {
-    _repos.clear();
-    _users.clear();
-    setState(() {});
-    if (key != "") {
-      defaultClient.search.repositories(key).listen((repo) {
-        setState(() {
-          _repos.add(repo);
-        });
-      });
-      defaultClient.search.users(key).listen((user) {
-        setState(() {
-          _users.add(user);
-        });
-      });
-    }
+    _searchRepo(key);
+    _searchUser(key);
+  }
+
+  void _searchRepo(String key) async {
+    setState(() {
+      _repos.clear();
+      _repoLoaded = false;
+    });
+    var list = await defaultClient.search.repositories(key).toList();
+    setState(() {
+      _repos.addAll(list);
+      _repoLoaded = true;
+    });
+  }
+
+  void _searchUser(String key) async {
+    setState(() {
+      _users.clear();
+      _userLoaded = false;
+    });
+    var list = await defaultClient.search.users(key).toList();
+    setState(() {
+      _users.addAll(list);
+      _userLoaded = true;
+    });
   }
 
   Widget _createUserItem(BuildContext context, int index) {
@@ -117,13 +131,19 @@ class _SearchPageState extends State<SearchPage> {
               child: Container(
                 child: TabBarView(
                   children: <Widget>[
-                    ListView.builder(
-                      itemCount: _repos.length * 2 - 1,
-                      itemBuilder: _createRepoItem,
+                    IndicatorContainer(
+                      showChild: _repoLoaded,
+                      child: ListView.builder(
+                        itemCount: _repos.length * 2 - 1,
+                        itemBuilder: _createRepoItem,
+                      ),
                     ),
-                    ListView.builder(
-                      itemCount: _users.length * 2 - 1,
-                      itemBuilder: _createUserItem,
+                    IndicatorContainer(
+                      showChild: _userLoaded,
+                      child: ListView.builder(
+                        itemCount: _users.length * 2 - 1,
+                        itemBuilder: _createUserItem,
+                      ),
                     )
                   ],
                 ),
