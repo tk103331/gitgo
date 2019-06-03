@@ -93,3 +93,76 @@ class _RepositoryPageState extends State<RepositoryPage> {
         ));
   }
 }
+
+class RepoDetailPage extends StatefulWidget {
+  String _title = "";
+
+  @override
+  _RepoDetailPageState createState() => _RepoDetailPageState();
+}
+
+class _RepoDetailPageState extends State<RepoDetailPage>
+    with SingleTickerProviderStateMixin {
+  github.Repository _repo;
+  TabController _tabController;
+
+  _RepoDetailPageState() {
+    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    _repo = ModalRoute.of(context).settings.arguments as github.Repository;
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_repo.name),
+        actions: <Widget>[
+          FlatButton(
+            child: Icon(Icons.star),
+            onPressed: () {},
+          ),
+          FlatButton(
+            child: Icon(Icons.call_split),
+            onPressed: () {},
+          )
+        ],
+        bottom: TabBar(controller: _tabController, tabs: [
+          Tab(
+            child: Text("信息"),
+          ),
+          Tab(
+            child: Text("文件"),
+          ),
+          Tab(
+            child: Text("提交"),
+          ),
+          Tab(
+            child: Text("活动"),
+          ),
+        ]),
+      ),
+      body: TabBarView(
+          controller: _tabController,
+          children: <Widget>[
+        Center(
+          child: Text("信息"),
+        ),
+        Center(
+          child: Text("文件"),
+        ),
+        Center(
+          child: Text("提交"),
+        ),
+        Center(
+          child: Text("活动"),
+        ),
+      ]),
+    );
+  }
+}

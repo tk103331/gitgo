@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/common/emums.dart';
 import 'package:github/server.dart';
 
 class RepoListItem extends StatelessWidget {
@@ -38,7 +39,10 @@ class RepoListItem extends StatelessWidget {
           )
         ],
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed(Pages.RepoDetail.toString(), arguments: _repo);
+      },
     );
   }
 }

@@ -14,7 +14,8 @@ enum Pages {
   TrendingRepo,
   RepoCollection,
   Topic,
-  GlobalActivity
+  GlobalActivity,
+  RepoDetail
 }
 
 enum Repos { Mine, Starred, Trending }

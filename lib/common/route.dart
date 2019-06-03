@@ -19,4 +19,5 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.StarredRepo.toString(): (context) => RepositoryPage(Repos.Starred),
   Pages.TrendingRepo.toString(): (context) => RepositoryPage(Repos.Trending),
   Pages.Search.toString(): (context) => SearchPage(),
+  Pages.RepoDetail.toString(): (context) => RepoDetailPage(),
 };
