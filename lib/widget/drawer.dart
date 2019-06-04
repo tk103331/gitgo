@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/common/emums.dart';
 
 import '../common/config.dart';
+import '../common/emums.dart';
 
 class NavDrawer extends StatelessWidget {
   const NavDrawer();

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
 import '../common/config.dart';
 import '../widget/activity_item.dart';
+import '../widget/indicator.dart';
 
 class ActivityPage extends StatefulWidget {
   @override

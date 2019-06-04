@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/common/emums.dart';
 import 'package:github/server.dart';
+
+import '../common/emums.dart';
 
 class RepoListItem extends StatelessWidget {
   Repository _repo;

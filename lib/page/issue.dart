@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
 import '../common/config.dart';
+import '../widget/indicator.dart';
 
 class IssuePage extends StatefulWidget {
   @override

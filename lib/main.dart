@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/page/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/auth.dart';
 import 'common/config.dart';
 import 'common/emums.dart';
 import 'common/route.dart';
+import 'page/login.dart';
 import 'page/start.dart';
 
 void main() => runApp(MyApp());

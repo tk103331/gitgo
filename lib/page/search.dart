@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
 import '../common/config.dart';
+import '../widget/indicator.dart';
 import '../widget/repo_item.dart';
 
 class SearchPage extends StatefulWidget {

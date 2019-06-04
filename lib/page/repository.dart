@@ -1,13 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
 import '../common/config.dart';
 import '../common/emums.dart';
+import '../widget/indicator.dart';
 import '../widget/repo_item.dart';
 
 class RepositoryPage extends StatefulWidget {
@@ -106,9 +104,11 @@ class RepoDetailPage extends StatefulWidget {
 
 class _RepoDetailPageState extends State<RepoDetailPage>
     with SingleTickerProviderStateMixin {
-  github.Repository _repo;
-  String _readme;
   TabController _tabController;
+  github.Repository _repo;
+  List<github.GitHubFile> _files = List();
+  String _readme;
+  String _path = "";
 
   _RepoDetailPageState() {
     _tabController = TabController(length: 4, vsync: this);
@@ -118,6 +118,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   void didChangeDependencies() {
     _repo = ModalRoute.of(context).settings.arguments as github.Repository;
     _getReadme();
+    _listFiles();
     super.didChangeDependencies();
   }
 
@@ -128,7 +129,63 @@ class _RepoDetailPageState extends State<RepoDetailPage>
       setState(() {
         _readme = str;
       });
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _listFiles() async {
+    setState(() {
+      _files.clear();
+    });
+    try {
+      var contents =
+          await defaultClient.repositories.getContents(_repo.slug(), _path);
+
+      if (contents.isFile) {
+        _files.add(contents.file);
+      } else if (contents.isDirectory) {
+        _files.addAll(contents.tree);
+      }
+      if (_files.length > 0) {
+        var parent = github.GitHubFile()
+          ..name = ".."
+          ..type = "dir";
+        _files.insert(0, parent);
+      }
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Widget _createFileItem(BuildContext context, int index) {
+    var file = _files[index];
+    return GestureDetector(
+      onTap: (){
+        if (file.type == "dir") {
+          if(file.name == "..") {
+            _path = _path.contains("/") ? _path.substring(0, _path.lastIndexOf("/")) : "";
+          } else {
+            _path += "/" + file.name;
+          }
+          _listFiles();
+        } else {
+
+        }
+      },
+      child: Container(
+          padding: EdgeInsets.only(left: 15),
+          height: 40,
+          child: Row(
+            children: <Widget>[
+              file.type == "dir"
+                  ? Icon(Icons.folder)
+                  : Icon(Icons.insert_drive_file),
+              Text(file.name)
+            ],
+          )),
+    );
   }
 
   @override
@@ -174,7 +231,10 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           ],
         ),
         Center(
-          child: Text("文件"),
+          child: ListView.builder(
+            itemCount: _files.length,
+            itemBuilder: _createFileItem,
+          ),
         ),
         Center(
           child: Text("提交"),
