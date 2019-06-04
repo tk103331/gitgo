@@ -109,6 +109,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   List<github.GitHubFile> _files = List();
   String _readme;
   String _path = "";
+  bool _fileLoaded = false;
 
   _RepoDetailPageState() {
     _tabController = TabController(length: 4, vsync: this);
@@ -136,6 +137,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
 
   void _listFiles() async {
     setState(() {
+      _fileLoaded = false;
       _files.clear();
     });
     try {
@@ -153,7 +155,9 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           ..type = "dir";
         _files.insert(0, parent);
       }
-      setState(() {});
+      setState(() {
+        _fileLoaded = true;
+      });
     } catch (e) {
       print(e);
     }
@@ -161,30 +165,27 @@ class _RepoDetailPageState extends State<RepoDetailPage>
 
   Widget _createFileItem(BuildContext context, int index) {
     var file = _files[index];
-    return GestureDetector(
-      onTap: (){
+    return ListTile(
+      title: Row(
+        children: <Widget>[
+          file.type == "dir"
+              ? Icon(Icons.folder)
+              : Icon(Icons.insert_drive_file),
+          Text(file.name)
+        ],
+      ),
+      onTap: () {
         if (file.type == "dir") {
-          if(file.name == "..") {
-            _path = _path.contains("/") ? _path.substring(0, _path.lastIndexOf("/")) : "";
+          if (file.name == "..") {
+            _path = _path.contains("/")
+                ? _path.substring(0, _path.lastIndexOf("/"))
+                : "";
           } else {
             _path += "/" + file.name;
           }
           _listFiles();
-        } else {
-
-        }
+        } else {}
       },
-      child: Container(
-          padding: EdgeInsets.only(left: 15),
-          height: 40,
-          child: Row(
-            children: <Widget>[
-              file.type == "dir"
-                  ? Icon(Icons.folder)
-                  : Icon(Icons.insert_drive_file),
-              Text(file.name)
-            ],
-          )),
     );
   }
 
@@ -222,15 +223,22 @@ class _RepoDetailPageState extends State<RepoDetailPage>
         Column(
           children: <Widget>[
             Container(
+                height: 30,
+                child:
+              Text("README", style: TextStyle(fontSize:20 ,fontWeight: FontWeight.bold),)
+            ),
+            
+            Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 137,
+              height: MediaQuery.of(context).size.height - 167,
               child: Markdown(
                 data: _readme ?? "",
               ),
             )
           ],
         ),
-        Center(
+        IndicatorContainer(
+          showChild: _fileLoaded,
           child: ListView.builder(
             itemCount: _files.length,
             itemBuilder: _createFileItem,
