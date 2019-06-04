@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart' as github;
 
@@ -104,6 +107,7 @@ class RepoDetailPage extends StatefulWidget {
 class _RepoDetailPageState extends State<RepoDetailPage>
     with SingleTickerProviderStateMixin {
   github.Repository _repo;
+  String _readme;
   TabController _tabController;
 
   _RepoDetailPageState() {
@@ -113,8 +117,18 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   @override
   void didChangeDependencies() {
     _repo = ModalRoute.of(context).settings.arguments as github.Repository;
-
+    _getReadme();
     super.didChangeDependencies();
+  }
+
+  void _getReadme() async {
+    try {
+      var file = await defaultClient.repositories.getReadme(_repo.slug());
+      var str = file.text;
+      setState(() {
+        _readme = str;
+      });
+    } catch (e) {}
   }
 
   @override
@@ -147,11 +161,17 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           ),
         ]),
       ),
-      body: TabBarView(
-          controller: _tabController,
+      body: TabBarView(controller: _tabController, children: <Widget>[
+        Column(
           children: <Widget>[
-        Center(
-          child: Text("信息"),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 137,
+              child: Markdown(
+                data: _readme ?? "",
+              ),
+            )
+          ],
         ),
         Center(
           child: Text("文件"),
