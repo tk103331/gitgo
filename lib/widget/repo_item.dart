@@ -4,7 +4,7 @@ import 'package:github/server.dart';
 import '../common/emums.dart';
 
 class RepoListItem extends StatelessWidget {
-  Repository _repo;
+  final Repository _repo;
 
   RepoListItem(this._repo);
 

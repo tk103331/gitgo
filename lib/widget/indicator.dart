@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class IndicatorContainer extends StatefulWidget {
-  Widget child;
-  bool showChild = false;
+  final Widget child;
+  final bool showChild;
 
   IndicatorContainer({@required this.child, @required this.showChild});
 

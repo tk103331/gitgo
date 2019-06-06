@@ -97,8 +97,6 @@ class _RepositoryPageState extends State<RepositoryPage> {
 }
 
 class RepoDetailPage extends StatefulWidget {
-  String _title = "";
-
   @override
   _RepoDetailPageState createState() => _RepoDetailPageState();
 }
@@ -122,12 +120,12 @@ class _RepoDetailPageState extends State<RepoDetailPage>
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
     _repo = ModalRoute.of(context).settings.arguments as github.Repository;
     _getReadme();
     _listFiles();
     _listEvents();
     _listCommits();
-    super.didChangeDependencies();
   }
 
   void _getReadme() async {
@@ -182,17 +180,20 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   }
 
   void _listEvents() async {
-    var events = await defaultClient.activity
-        .listRepositoryEvents(_repo.slug())
-        .toList();
-    _events.addAll(events);
-    setState(() {
-      _eventLoaded = true;
-    });
+    try {
+      var events = await defaultClient.activity
+          .listRepositoryEvents(_repo.slug())
+          .toList();
+      _events.addAll(events);
+      setState(() {
+        _eventLoaded = true;
+      });
+    } catch (e) {}
   }
 
   Widget _createFileItem(BuildContext context, int index) {
     var file = _files[index];
+    file.sourceRepository = _repo.slug();
     return ListTile(
       title: Row(
         children: <Widget>[
@@ -212,7 +213,10 @@ class _RepoDetailPageState extends State<RepoDetailPage>
             _path += "/" + file.name;
           }
           _listFiles();
-        } else {}
+        } else {
+          Navigator.of(context)
+              .pushNamed(Pages.CodeView.toString(), arguments: file);
+        }
       },
     );
   }

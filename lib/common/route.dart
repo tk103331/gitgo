@@ -8,6 +8,7 @@ import '../page/notification.dart';
 import '../page/profile.dart';
 import '../page/repository.dart';
 import '../page/search.dart';
+import '../page/code.dart';
 
 Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Activity.toString(): (context) => ActivityPage(),
@@ -20,4 +21,5 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.TrendingRepo.toString(): (context) => RepositoryPage(Repos.Trending),
   Pages.Search.toString(): (context) => SearchPage(),
   Pages.RepoDetail.toString(): (context) => RepoDetailPage(),
+  Pages.CodeView.toString(): (context) => CodeViewPage(),
 };

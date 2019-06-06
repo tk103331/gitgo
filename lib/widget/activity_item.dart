@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:github/server.dart';
 
 class ActivityListItem extends StatelessWidget {
-  Event _event;
+  final Event _event;
 
   ActivityListItem(this._event);
 
