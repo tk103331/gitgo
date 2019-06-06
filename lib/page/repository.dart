@@ -171,12 +171,14 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   }
 
   void _listCommits() async {
-    var commits =
-        await defaultClient.repositories.listCommits(_repo.slug()).toList();
-    _commits.addAll(commits);
-    setState(() {
-      _commitLoaded = true;
-    });
+    try {
+      var commits =
+          await defaultClient.repositories.listCommits(_repo.slug()).toList();
+      _commits.addAll(commits);
+      setState(() {
+        _commitLoaded = true;
+      });
+    } catch (e) {}
   }
 
   void _listEvents() async {
