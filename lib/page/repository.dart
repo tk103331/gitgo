@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:gitgo/widget/activity_item.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
@@ -107,9 +108,13 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   TabController _tabController;
   github.Repository _repo;
   List<github.GitHubFile> _files = List();
+  List<github.Event> _events = List();
+  List<github.RepositoryCommit> _commits = List();
   String _readme;
   String _path = "";
   bool _fileLoaded = false;
+  bool _eventLoaded = false;
+  bool _commitLoaded = false;
 
   _RepoDetailPageState() {
     _tabController = TabController(length: 4, vsync: this);
@@ -120,6 +125,8 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     _repo = ModalRoute.of(context).settings.arguments as github.Repository;
     _getReadme();
     _listFiles();
+    _listEvents();
+    _listCommits();
     super.didChangeDependencies();
   }
 
@@ -163,6 +170,25 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     }
   }
 
+  void _listCommits() async {
+    var commits =
+        await defaultClient.repositories.listCommits(_repo.slug()).toList();
+    _commits.addAll(commits);
+    setState(() {
+      _commitLoaded = true;
+    });
+  }
+
+  void _listEvents() async {
+    var events = await defaultClient.activity
+        .listRepositoryEvents(_repo.slug())
+        .toList();
+    _events.addAll(events);
+    setState(() {
+      _eventLoaded = true;
+    });
+  }
+
   Widget _createFileItem(BuildContext context, int index) {
     var file = _files[index];
     return ListTile(
@@ -187,6 +213,19 @@ class _RepoDetailPageState extends State<RepoDetailPage>
         } else {}
       },
     );
+  }
+
+  Widget _createCommitItem(BuildContext context, int index) {
+    var commit = _commits[index];
+    return ListTile(
+        leading: Image.network(commit.committer.avatarUrl),
+        title: Text(commit.committer.login),
+        subtitle: Text(commit.commit.message));
+  }
+
+  Widget _createActivityItem(BuildContext context, int index) {
+    var event = _events[0];
+    return ActivityListItem(event);
   }
 
   @override
@@ -224,10 +263,10 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           children: <Widget>[
             Container(
                 height: 30,
-                child:
-              Text("README", style: TextStyle(fontSize:20 ,fontWeight: FontWeight.bold),)
-            ),
-            
+                child: Text(
+                  "README",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                )),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 167,
@@ -244,12 +283,20 @@ class _RepoDetailPageState extends State<RepoDetailPage>
             itemBuilder: _createFileItem,
           ),
         ),
-        Center(
-          child: Text("提交"),
+        IndicatorContainer(
+          showChild: _commitLoaded,
+          child: ListView.builder(
+            itemCount: _commits.length,
+            itemBuilder: _createCommitItem,
+          ),
         ),
-        Center(
-          child: Text("活动"),
-        ),
+        IndicatorContainer(
+          showChild: _eventLoaded,
+          child: ListView.builder(
+            itemCount: _events.length,
+            itemBuilder: _createActivityItem,
+          ),
+        )
       ]),
     );
   }
