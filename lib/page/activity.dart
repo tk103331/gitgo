@@ -5,6 +5,7 @@ import '../api/base.dart';
 import '../common/config.dart';
 import '../widget/activity_item.dart';
 import '../widget/indicator.dart';
+import '../api/service.dart';
 
 class ActivityPage extends StatefulWidget {
   @override
@@ -18,16 +19,19 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
     _loadMoreData();
+    super.didChangeDependencies();
   }
 
   _loadMoreData() async {
-    var list = await defaultClient.activity
-        .listEventsPerformedByUser(currentUser.login)
-        .toList();
-
+    //var events = await defaultClient.activity.listPublicEventsPerformedByUser(currentUser.login).toList();
+    var events = await listPublicEventsReceivedByUser(currentUser.login).toList();
     setState(() {
-      _events.addAll(list);
+      _events.addAll(events);
       _loaded = true;
     });
   }

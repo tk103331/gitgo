@@ -32,13 +32,16 @@ class _ProfilePageState extends State<ProfilePage> {
         .listEventsPerformedByUser(_user.login)
         .toList();
     setState(() {
-      _events.addAll(list);
-      _eventLoaded = true;
+      if(mounted) {
+        _events.addAll(list);
+        _eventLoaded = true;
+      }
     });
   }
 
   void _loadRepoData() async {
     var list = await defaultClient.repositories.listRepositories().toList();
+
     setState(() {
       _repos.addAll(list);
       _repoLoaded = true;
