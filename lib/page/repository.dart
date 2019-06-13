@@ -8,6 +8,7 @@ import '../common/config.dart';
 import '../common/emums.dart';
 import '../widget/indicator.dart';
 import '../widget/repo_item.dart';
+import '../api/service.dart';
 
 class RepositoryPage extends StatefulWidget {
   final Repos _repos;
@@ -46,10 +47,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
         });
         break;
       case Repos.Starred:
-        //TODO starred
-        var list = await defaultClient.repositories
-            .listRepositories(type: "private")
-            .toList();
+        var list = await listStarredRepositoriesByUser(currentUser.login).toList();
 
         setState(() {
           _repositories.addAll(list);

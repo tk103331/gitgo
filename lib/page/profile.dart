@@ -6,6 +6,7 @@ import '../common/config.dart';
 import '../widget/activity_item.dart';
 import '../widget/indicator.dart';
 import '../widget/repo_item.dart';
+import '../api/service.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -40,12 +41,14 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _loadRepoData() async {
-    var list = await defaultClient.repositories.listRepositories().toList();
+    var list = await listStarredRepositoriesByUser(currentUser.login).toList();
+    if(mounted) {
+      setState(() {
+        _repos.addAll(list);
+        _repoLoaded = true;
+      });
+    }
 
-    setState(() {
-      _repos.addAll(list);
-      _repoLoaded = true;
-    });
   }
 
   Widget _createCountButton(String name, String count) {
