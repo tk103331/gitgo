@@ -3,12 +3,13 @@ import 'package:flutter/widgets.dart';
 import './emums.dart';
 import '../page/activity.dart';
 import '../page/bookmark.dart';
+import '../page/code.dart';
 import '../page/issue.dart';
 import '../page/notification.dart';
 import '../page/profile.dart';
 import '../page/repository.dart';
 import '../page/search.dart';
-import '../page/code.dart';
+import '../page/topic.dart';
 
 Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Activity.toString(): (context) => ActivityPage(),
@@ -22,4 +23,5 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Search.toString(): (context) => SearchPage(),
   Pages.RepoDetail.toString(): (context) => RepoDetailPage(),
   Pages.CodeView.toString(): (context) => CodeViewPage(),
+  Pages.Topic.toString(): (context) => TopicPage(),
 };

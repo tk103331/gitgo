@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/common/config.dart';
+import 'package:gitgo/widget/indicator.dart';
+
+import '../api/service.dart';
+import '../model/topic.dart';
 
 class TopicPage extends StatefulWidget {
   @override
@@ -6,8 +11,54 @@ class TopicPage extends StatefulWidget {
 }
 
 class _TopicPageState extends State<TopicPage> {
+  List<Topic> _topics = List();
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadData();
+  }
+
+  void _loadData() async {
+    var result = await listFeaturedTopics();
+    if (mounted) {
+      setState(() {
+        _topics.addAll(result.items);
+        _loaded = true;
+      });
+    }
+  }
+
+  Widget _createItem(BuildContext context, int index) {
+    if (index % 2 == 1) {
+      return Divider();
+    }
+    var topic = _topics[index ~/ 2];
+    return ListTile(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+        Text(topic?.name??""),
+        Text(topic?.createBy??"")
+      ],),
+      subtitle: Text(topic?.shortDescription??""),
+      onTap: () {},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("主题"),
+        ),
+        drawer: MainDrawer,
+        body: IndicatorContainer(
+          showChild: _loaded,
+          child: ListView.builder(
+              itemCount: _topics.length * 2 - 1, itemBuilder: _createItem),
+        ));
   }
 }

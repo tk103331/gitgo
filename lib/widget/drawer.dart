@@ -87,6 +87,14 @@ class NavDrawer extends StatelessWidget {
                 .pushReplacementNamed(Pages.TrendingRepo.toString());
           },
         ),
+        ListTile(
+          leading: Icon(Icons.apps),
+          title: Text("主题"),
+          onTap: () {
+            Navigator.of(context)
+                .pushReplacementNamed(Pages.Topic.toString());
+          },
+        ),
       ],
     ));
   }

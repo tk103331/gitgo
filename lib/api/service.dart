@@ -11,6 +11,13 @@ Stream<Repository> listStarredRepositoriesByUser(String user) {
 }
 
 Future<TopicResult> searchTopics(String query) {
-  return defaultClient.getJSON("/search/topics",convert: TopicResult.fromJson);
+  Map<String, String> params = Map();
+  params['q'] = query;
+  Map<String, String> headers = Map();
+  headers['Accept'] = 'application/vnd.github.mercy-preview+json';
+  return defaultClient.getJSON("/search/topics",convert: TopicResult.fromJson, params: params, headers: headers);
 }
 
+Future<TopicResult> listFeaturedTopics() {
+  return searchTopics("is:featured");
+}
