@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gitgo/common/config.dart';
+import 'package:gitgo/common/emums.dart';
 import 'package:gitgo/widget/indicator.dart';
 
 import '../api/service.dart';
@@ -44,7 +45,11 @@ class _TopicPageState extends State<TopicPage> {
         Text(topic?.createBy??"")
       ],),
       subtitle: Text(topic?.shortDescription??""),
-      onTap: () {},
+      onTap: () {
+        Map<String, dynamic> args = Map();
+        args["topic"] = topic.name;
+        Navigator.of(context).pushNamed(Pages.TopicRepo.toString(), arguments: args);
+      },
     );
   }
 

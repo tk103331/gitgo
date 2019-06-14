@@ -24,4 +24,5 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.RepoDetail.toString(): (context) => RepoDetailPage(),
   Pages.CodeView.toString(): (context) => CodeViewPage(),
   Pages.Topic.toString(): (context) => TopicPage(),
+  Pages.TopicRepo.toString(): (context) => RepositoryPage(Repos.Topic),
 };

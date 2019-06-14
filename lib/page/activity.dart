@@ -28,7 +28,6 @@ class _ActivityPageState extends State<ActivityPage> {
   }
 
   _loadMoreData() async {
-    //var events = await defaultClient.activity.listPublicEventsPerformedByUser(currentUser.login).toList();
     var events = await listPublicEventsReceivedByUser(currentUser.login).toList();
     setState(() {
       _events.addAll(events);

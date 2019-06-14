@@ -4,11 +4,11 @@ import 'package:gitgo/widget/activity_item.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
+import '../api/service.dart';
 import '../common/config.dart';
 import '../common/emums.dart';
 import '../widget/indicator.dart';
 import '../widget/repo_item.dart';
-import '../api/service.dart';
 
 class RepositoryPage extends StatefulWidget {
   final Repos _repos;
@@ -24,12 +24,25 @@ class _RepositoryPageState extends State<RepositoryPage> {
   Repos _repos = Repos.Mine;
   String _title = "我的仓库";
   bool _loaded = false;
+  String _topic = "";
 
   _RepositoryPageState(this._repos);
 
   @override
   void initState() {
     super.initState();
+
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    var params = ModalRoute
+        .of(context)
+        .settings
+        .arguments as Map<String, dynamic>;
+    if(params != null) {
+      _topic = params['topic'] as String;
+    }
     _loadData();
   }
 
@@ -47,7 +60,8 @@ class _RepositoryPageState extends State<RepositoryPage> {
         });
         break;
       case Repos.Starred:
-        var list = await listStarredRepositoriesByUser(currentUser.login).toList();
+        var list =
+            await listStarredRepositoriesByUser(currentUser.login).toList();
 
         setState(() {
           _repositories.addAll(list);
@@ -66,6 +80,15 @@ class _RepositoryPageState extends State<RepositoryPage> {
           _title = "趋势仓库";
         });
 
+        break;
+      case Repos.Topic:
+        var list =
+            await defaultClient.search.repositories("topic:" + _topic).toList();
+        setState(() {
+          _repositories.addAll(list);
+          _loaded = true;
+          _title = "主题 " + _topic;
+        });
         break;
     }
   }

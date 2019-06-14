@@ -17,6 +17,7 @@ enum Pages {
   GlobalActivity,
   RepoDetail,
   CodeView,
+  TopicRepo,
 }
 
-enum Repos { Mine, Starred, Trending }
+enum Repos { Mine, Starred, Trending, Topic }
