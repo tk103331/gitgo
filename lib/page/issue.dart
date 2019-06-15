@@ -31,7 +31,9 @@ class _IssuePageState extends State<IssuePage> {
 
   Widget _createItem(BuildContext context, int index) {
     var issue = _issues[index];
-    return ListTile(title: Text(issue.title));
+    return Card(
+      child: ListTile(title: Text(issue.title)),
+    );
   }
 
   @override

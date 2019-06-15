@@ -30,7 +30,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Widget _createItem(BuildContext context, int index) {
     var n = _notifications[index];
-    return ListTile(title: Text(n.subject?.title ?? "AAA"));
+    return Card(child: ListTile(title: Text(n.subject?.title ?? "")));
   }
 
   @override

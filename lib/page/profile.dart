@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
+import '../api/service.dart';
 import '../common/config.dart';
 import '../widget/activity_item.dart';
 import '../widget/indicator.dart';
 import '../widget/repo_item.dart';
-import '../api/service.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -33,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
         .listEventsPerformedByUser(_user.login)
         .toList();
     setState(() {
-      if(mounted) {
+      if (mounted) {
         _events.addAll(list);
         _eventLoaded = true;
       }
@@ -42,13 +42,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _loadRepoData() async {
     var list = await listStarredRepositoriesByUser(currentUser.login).toList();
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _repos.addAll(list);
         _repoLoaded = true;
       });
     }
-
   }
 
   Widget _createCountButton(String name, String count) {
@@ -158,13 +157,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           IndicatorContainer(
                             showChild: _eventLoaded,
                             child: ListView.builder(
-                                itemCount: _events.length * 2 - 1,
+                                itemCount: _events.length,
                                 itemBuilder: _createActivityItem),
                           ),
                           IndicatorContainer(
                               showChild: _repoLoaded,
                               child: ListView.builder(
-                                  itemCount: _repos.length * 2 - 1,
+                                  itemCount: _repos.length,
                                   itemBuilder: _createRepoItem))
                         ]),
                       )
@@ -178,18 +177,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _createActivityItem(BuildContext context, int index) {
-    if (index % 2 == 1) {
-      return Divider();
-    }
-    var event = _events[index ~/ 2];
+    var event = _events[index];
     return ActivityListItem(event);
   }
 
   Widget _createRepoItem(BuildContext context, int index) {
-    if (index % 2 == 1) {
-      return Divider();
-    }
-    var repo = _repos[index ~/ 2];
+    var repo = _repos[index];
     return RepoListItem(repo);
   }
 }

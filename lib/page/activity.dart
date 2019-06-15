@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:github/server.dart';
 
-import '../api/base.dart';
+import '../api/service.dart';
 import '../common/config.dart';
 import '../widget/activity_item.dart';
 import '../widget/indicator.dart';
-import '../api/service.dart';
 
 class ActivityPage extends StatefulWidget {
   @override
@@ -28,18 +27,15 @@ class _ActivityPageState extends State<ActivityPage> {
   }
 
   _loadMoreData() async {
-    var events = await listPublicEventsReceivedByUser(currentUser.login).toList();
+    var events =
+        await listPublicEventsReceivedByUser(currentUser.login).toList();
     setState(() {
       _events.addAll(events);
       _loaded = true;
     });
   }
 
-  Widget _createItem(BuildContext context, int i) {
-    if (i % 2 == 1) {
-      return Divider();
-    }
-    int index = i ~/ 2;
+  Widget _createItem(BuildContext context, int index) {
     var e = _events[index];
     return ActivityListItem(e);
   }
@@ -54,7 +50,7 @@ class _ActivityPageState extends State<ActivityPage> {
         body: IndicatorContainer(
           showChild: _loaded,
           child: ListView.builder(
-              itemCount: _events.length * 2 - 1, itemBuilder: _createItem),
+              itemCount: _events.length, itemBuilder: _createItem),
         ));
   }
 }

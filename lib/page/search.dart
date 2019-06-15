@@ -54,7 +54,7 @@ class _SearchPageState extends State<SearchPage> {
     }
     var user = _users[index ~/ 2];
     print(user);
-    return Container(
+    return Card(
       child: ListTile(
         leading: Image.network(user.avatarUrl),
         title: Text(user.login),

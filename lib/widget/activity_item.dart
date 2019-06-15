@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:github/server.dart';
 
+import '../common/emums.dart';
+
 class ActivityListItem extends StatelessWidget {
   final Event _event;
 
@@ -8,7 +10,8 @@ class ActivityListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return Card(
+        child: ListTile(
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -23,7 +26,10 @@ class ActivityListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [Text(_event?.type ?? ""), Text(_event?.repo?.name ?? "")],
       ),
-      onTap: () {},
-    );
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed(Pages.RepoDetail.toString(), arguments: _event.repo);
+      },
+    ));
   }
 }

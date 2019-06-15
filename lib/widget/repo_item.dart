@@ -10,8 +10,8 @@ class RepoListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.all(0),
+    return Card(
+        child: ListTile(
       leading: CircleAvatar(
         child: Image.network(_repo.owner.avatarUrl),
       ),
@@ -44,6 +44,6 @@ class RepoListItem extends StatelessWidget {
         Navigator.of(context)
             .pushNamed(Pages.RepoDetail.toString(), arguments: _repo);
       },
-    );
+    ));
   }
 }

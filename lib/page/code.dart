@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
-import 'package:gitgo/api/base.dart';
 import 'package:github/server.dart';
+
+import '../api/base.dart';
 
 class CodeViewPage extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class _CodeViewPageState extends State<CodeViewPage> {
   String _text = "";
   Syntax _syntax = Syntax.DART;
   SyntaxTheme _syntaxTheme = SyntaxTheme.standard();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -38,7 +40,7 @@ class _CodeViewPageState extends State<CodeViewPage> {
   }
 
   Syntax mappingSyntax(String type) {
-    switch(type.toLowerCase()) {
+    switch (type.toLowerCase()) {
       case "java":
         return Syntax.JAVA;
       case "javascript":
@@ -54,15 +56,42 @@ class _CodeViewPageState extends State<CodeViewPage> {
 
   List<PopupMenuItem<SyntaxTheme>> _syntaxThemes() {
     return <PopupMenuItem<SyntaxTheme>>[
-      PopupMenuItem(value: SyntaxTheme.standard(),child: Text("Standard"),),
-      PopupMenuItem(value: SyntaxTheme.ayuDark(),child: Text("Ayu Dark"),),
-      PopupMenuItem(value: SyntaxTheme.ayuLight(),child: Text("Ayu Light"),),
-      PopupMenuItem(value: SyntaxTheme.dracula(),child: Text("Dracula"),),
-      PopupMenuItem(value: SyntaxTheme.gravityDark(),child: Text("Dravity Dark"),),
-      PopupMenuItem(value: SyntaxTheme.gravityLight(),child: Text("Gravity Light"),),
-      PopupMenuItem(value: SyntaxTheme.monokaiSublime(),child: Text("Monokai Sublime"),),
-      PopupMenuItem(value: SyntaxTheme.obsidian(),child: Text("Obsidian"),),
-      PopupMenuItem(value: SyntaxTheme.oceanSunset(),child: Text("Ocean Sunset"),),
+      PopupMenuItem(
+        value: SyntaxTheme.standard(),
+        child: Text("Standard"),
+      ),
+      PopupMenuItem(
+        value: SyntaxTheme.ayuDark(),
+        child: Text("Ayu Dark"),
+      ),
+      PopupMenuItem(
+        value: SyntaxTheme.ayuLight(),
+        child: Text("Ayu Light"),
+      ),
+      PopupMenuItem(
+        value: SyntaxTheme.dracula(),
+        child: Text("Dracula"),
+      ),
+      PopupMenuItem(
+        value: SyntaxTheme.gravityDark(),
+        child: Text("Dravity Dark"),
+      ),
+      PopupMenuItem(
+        value: SyntaxTheme.gravityLight(),
+        child: Text("Gravity Light"),
+      ),
+      PopupMenuItem(
+        value: SyntaxTheme.monokaiSublime(),
+        child: Text("Monokai Sublime"),
+      ),
+      PopupMenuItem(
+        value: SyntaxTheme.obsidian(),
+        child: Text("Obsidian"),
+      ),
+      PopupMenuItem(
+        value: SyntaxTheme.oceanSunset(),
+        child: Text("Ocean Sunset"),
+      ),
     ];
   }
 

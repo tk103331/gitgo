@@ -91,8 +91,7 @@ class NavDrawer extends StatelessWidget {
           leading: Icon(Icons.apps),
           title: Text("主题"),
           onTap: () {
-            Navigator.of(context)
-                .pushReplacementNamed(Pages.Topic.toString());
+            Navigator.of(context).pushReplacementNamed(Pages.Topic.toString());
           },
         ),
       ],

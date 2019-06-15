@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:gitgo/widget/activity_item.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
 import '../api/service.dart';
 import '../common/config.dart';
 import '../common/emums.dart';
+import '../widget/activity_item.dart';
 import '../widget/indicator.dart';
 import '../widget/repo_item.dart';
 
@@ -31,16 +31,14 @@ class _RepositoryPageState extends State<RepositoryPage> {
   @override
   void initState() {
     super.initState();
-
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    var params = ModalRoute
-        .of(context)
-        .settings
-        .arguments as Map<String, dynamic>;
-    if(params != null) {
+    var params =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    if (params != null) {
       _topic = params['topic'] as String;
     }
     _loadData();
@@ -94,10 +92,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
   }
 
   Widget _createItem(BuildContext context, int index) {
-    if (index % 2 == 1) {
-      return Divider();
-    }
-    var repo = _repositories[index ~/ 2];
+    var repo = _repositories[index];
     return RepoListItem(repo);
   }
 
@@ -111,8 +106,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
         body: IndicatorContainer(
           showChild: _loaded,
           child: ListView.builder(
-              itemCount: _repositories.length * 2 - 1,
-              itemBuilder: _createItem),
+              itemCount: _repositories.length, itemBuilder: _createItem),
         ));
   }
 }
