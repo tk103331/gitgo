@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:github/server.dart' as github;
 
-import '../api/base.dart';
+import '../api/service.dart';
 import '../common/config.dart';
 import '../widget/indicator.dart';
 
@@ -21,10 +21,10 @@ class _IssuePageState extends State<IssuePage> {
   }
 
   _loadData() async {
-    var list = await defaultClient.issues.listAll().toList();
+    var list = await listUserOpenedIssues(currentUser.login);
 
     setState(() {
-      _issues.addAll(list);
+      _issues.addAll(list.items);
       _loaded = true;
     });
   }
@@ -32,8 +32,15 @@ class _IssuePageState extends State<IssuePage> {
   Widget _createItem(BuildContext context, int index) {
     var issue = _issues[index];
     return Card(
-      child: ListTile(title: Text(issue.title)),
-    );
+        child: ListTile(
+      leading: Image.network(issue?.user?.avatarUrl ?? ""),
+      title: Text(issue?.title),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+            Text(issue?.createdAt?.toString()??"")
+          ],),
+    ));
   }
 
   @override

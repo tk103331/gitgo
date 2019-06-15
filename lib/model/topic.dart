@@ -16,25 +16,3 @@ class Topic {
   }
 }
 
-class TopicResult {
-  int totalCount;
-  bool incompleteResults;
-  List<Topic> items;
-
-  static TopicResult fromJson(Map<String, dynamic> input) {
-    var result = new TopicResult()
-      ..totalCount = input["total_count"]
-      ..incompleteResults = input["incomplete_results"]
-      ..items = List();
-
-    var items = input['items'] as List;
-    if (items != null) {
-      items.forEach((it) {
-        var json = it as Map<String, dynamic>;
-        result.items.add(Topic.fromJson(json));
-      });
-    }
-
-    return result;
-  }
-}

@@ -1,6 +1,6 @@
 import 'package:github/server.dart';
 
-import '../model/topic.dart';
+import '../model/search.dart';
 import 'base.dart';
 
 Stream<Event> listPublicEventsReceivedByUser(String user) {
@@ -24,4 +24,16 @@ Future<TopicResult> searchTopics(String query) {
 
 Future<TopicResult> listFeaturedTopics() {
   return searchTopics("is:featured");
+}
+
+Future<IssueResult> searchIssues(String query) {
+  Map<String, String> params = Map();
+  params['q'] = query;
+  Map<String, String> headers = Map();
+  headers['Accept'] = 'application/vnd.github.symmetra-preview+json';
+  return defaultClient.getJSON("/search/issues", convert: IssueResult.fromJson, params: params, headers: headers);
+}
+
+Future<IssueResult> listUserOpenedIssues(String user) {
+  return searchIssues("author:$user");
 }
