@@ -14,34 +14,45 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String _userName = "";
   User _user = null;
   List<Event> _events = List();
   bool _eventLoaded = false;
   List<Repository> _repos = List();
   bool _repoLoaded = false;
+  bool _userLoaded = false;
 
   @override
   void didChangeDependencies() {
-    _user = ModalRoute.of(context).settings.arguments as User;
+    var user = ModalRoute.of(context).settings.arguments as User;
+    _userName = user.login;
+    _loadUserData();
     _loadEventData();
     _loadRepoData();
     super.didChangeDependencies();
   }
 
-  void _loadEventData() async {
-    var list = await defaultClient.activity
-        .listEventsPerformedByUser(_user.login)
-        .toList();
+  void _loadUserData() async {
+    _user = await defaultClient.users.getUser(_userName);
     setState(() {
-      if (mounted) {
-        _events.addAll(list);
-        _eventLoaded = true;
-      }
+      _userLoaded = true;
     });
   }
 
+  void _loadEventData() async {
+    var list = await defaultClient.activity
+        .listEventsPerformedByUser(_userName)
+        .toList();
+    if (mounted) {
+      setState(() {
+        _events.addAll(list);
+        _eventLoaded = true;
+      });
+    }
+  }
+
   void _loadRepoData() async {
-    var list = await listStarredRepositoriesByUser(currentUser.login).toList();
+    var list = await listStarredRepositoriesByUser(_userName).toList();
     if (mounted) {
       setState(() {
         _repos.addAll(list);
@@ -71,7 +82,8 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Text("个人主页"),
       ),
       drawer: MainDrawer,
-      body: Container(
+      body: IndicatorContainer(
+        showChild: _userLoaded,
         child: Column(
           children: <Widget>[
             Container(
@@ -94,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: <Widget>[
                           Text(_user?.login ?? ""),
                           Text(_user?.location ?? ""),
-                          Text("创建于 " + _user?.createdAt?.toString() ?? "")
+                          Text(_user?.createdAt?.toString() ?? "")
                         ],
                       ))
                 ],
@@ -141,14 +153,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        _createCountButton("关注我的",
-                                            _user.followersCount.toString()),
-                                        _createCountButton("我关注的",
-                                            _user.followingCount.toString()),
-                                        _createCountButton("公开仓库",
-                                            _user.publicReposCount.toString()),
-                                        _createCountButton("公开Gist",
-                                            _user.publicGistsCount.toString()),
+                                        _createCountButton(
+                                            "关注我的",
+                                            _user?.followersCount?.toString() ??
+                                                ""),
+                                        _createCountButton(
+                                            "我关注的",
+                                            _user?.followingCount?.toString() ??
+                                                ""),
+                                        _createCountButton(
+                                            "公开仓库",
+                                            _user?.publicReposCount
+                                                    ?.toString() ??
+                                                ""),
+                                        _createCountButton(
+                                            "公开Gist",
+                                            _user?.publicGistsCount
+                                                    ?.toString() ??
+                                                ""),
                                       ],
                                     )
                                   ],

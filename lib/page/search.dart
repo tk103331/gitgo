@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/common/emums.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
@@ -12,9 +13,9 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  bool _repoLoaded = false;
+  bool _repoLoaded = true;
   List<Repository> _repos = List();
-  bool _userLoaded = false;
+  bool _userLoaded = true;
   List<User> _users = List();
   TextEditingController _textEditingController = TextEditingController();
   bool _showActions = false;
@@ -49,24 +50,23 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _createUserItem(BuildContext context, int index) {
-    if (index % 2 == 1) {
-      return Divider();
-    }
-    var user = _users[index ~/ 2];
+    var user = _users[index];
     print(user);
     return Card(
       child: ListTile(
+        contentPadding: EdgeInsets.all(10),
         leading: Image.network(user.avatarUrl),
         title: Text(user.login),
+        onTap: (){
+          Navigator.of(context).pushNamed(Pages.Profile.toString(), arguments: user);
+        },
       ),
     );
   }
 
   Widget _createRepoItem(BuildContext context, int index) {
-    if (index % 2 == 1) {
-      return Divider();
-    }
-    var repo = _repos[index ~/ 2];
+
+    var repo = _repos[index];
     return RepoListItem(repo);
   }
 
@@ -134,14 +134,14 @@ class _SearchPageState extends State<SearchPage> {
                     IndicatorContainer(
                       showChild: _repoLoaded,
                       child: ListView.builder(
-                        itemCount: _repos.length * 2 - 1,
+                        itemCount: _repos.length,
                         itemBuilder: _createRepoItem,
                       ),
                     ),
                     IndicatorContainer(
                       showChild: _userLoaded,
                       child: ListView.builder(
-                        itemCount: _users.length * 2 - 1,
+                        itemCount: _users.length,
                         itemBuilder: _createUserItem,
                       ),
                     )
