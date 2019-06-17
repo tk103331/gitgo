@@ -80,18 +80,18 @@ class NavDrawer extends StatelessWidget {
           },
         ),
         ListTile(
-          leading: Icon(Icons.trending_up),
-          title: Text("趋势"),
-          onTap: () {
-            Navigator.of(context)
-                .pushReplacementNamed(Pages.TrendingRepo.toString());
-          },
-        ),
-        ListTile(
           leading: Icon(Icons.apps),
-          title: Text("主题"),
+          title: Text("精选主题"),
           onTap: () {
             Navigator.of(context).pushReplacementNamed(Pages.Topic.toString());
+          },
+        ),
+        Divider(),
+        ListTile(
+          leading: Icon(Icons.settings),
+          title: Text("设置"),
+          onTap: () {
+            Navigator.of(context).pushReplacementNamed(Pages.Setting.toString());
           },
         ),
       ],

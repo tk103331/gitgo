@@ -18,6 +18,7 @@ enum Pages {
   RepoDetail,
   CodeView,
   TopicRepo,
+  Setting,
 }
 
 enum Repos { Mine, Starred, Trending, Topic }

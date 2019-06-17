@@ -10,6 +10,7 @@ import '../page/profile.dart';
 import '../page/repository.dart';
 import '../page/search.dart';
 import '../page/topic.dart';
+import '../page/setting.dart';
 
 Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Activity.toString(): (context) => ActivityPage(),
@@ -25,4 +26,5 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.CodeView.toString(): (context) => CodeViewPage(),
   Pages.Topic.toString(): (context) => TopicPage(),
   Pages.TopicRepo.toString(): (context) => RepositoryPage(Repos.Topic),
+  Pages.Setting.toString(): (context) => SettingPage(),
 };
