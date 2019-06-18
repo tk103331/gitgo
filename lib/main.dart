@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import 'api/auth.dart';
 import 'common/config.dart';
@@ -13,11 +14,17 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: appTitle,
-      home: MainPage(),
-      routes: mainRoutes,
-    );
+    return ScopedModel<SettingModel>(
+        model: SettingModel(),
+        child: new ScopedModelDescendant<SettingModel>(
+            builder: (context, child, model) {
+          return MaterialApp(
+            title: appTitle,
+            home: MainPage(),
+            routes: mainRoutes,
+            theme: ThemeData(primarySwatch: model.themeColor),
+          );
+        }));
   }
 }
 
