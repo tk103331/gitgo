@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:github/server.dart' as github;
+import 'package:oktoast/oktoast.dart';
 
 import '../api/base.dart';
 import '../common/config.dart';
@@ -279,8 +280,10 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   void _handleClickStar() async {
     if (_isStarred) {
       await defaultClient.activity.unstar(_repo.slug());
+      showToast("取消星标成功", position: ToastPosition(align: Alignment.bottomCenter));
     } else {
       await defaultClient.activity.star(_repo.slug());
+      showToast("星标成功", position: ToastPosition(align: Alignment.bottomCenter));
     }
     _loadIsStarred();
   }

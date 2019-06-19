@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:oktoast/oktoast.dart';
 
 import 'api/auth.dart';
 import 'common/config.dart';
@@ -18,12 +19,13 @@ class MyApp extends StatelessWidget {
         model: settingModel,
         child: new ScopedModelDescendant<SettingModel>(
             builder: (context, child, model) {
-          return MaterialApp(
+          return OKToast(
+              child: MaterialApp(
             title: appTitle,
             home: MainPage(),
             routes: mainRoutes,
             theme: ThemeData(primarySwatch: model.themeColor),
-          );
+          ));
         }));
   }
 }
