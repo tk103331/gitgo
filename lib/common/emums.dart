@@ -21,4 +21,4 @@ enum Pages {
   Setting,
 }
 
-enum Repos { Mine, Starred, Trending, Topic }
+enum Repos { Mine, Starred, Topic }

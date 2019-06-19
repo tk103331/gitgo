@@ -17,7 +17,6 @@ class _TopicPageState extends State<TopicPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadData();
   }

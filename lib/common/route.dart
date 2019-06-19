@@ -20,7 +20,6 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Profile.toString(): (context) => ProfilePage(),
   Pages.MineRepo.toString(): (context) => RepositoryPage(Repos.Mine),
   Pages.StarredRepo.toString(): (context) => RepositoryPage(Repos.Starred),
-  Pages.TrendingRepo.toString(): (context) => RepositoryPage(Repos.Trending),
   Pages.Search.toString(): (context) => SearchPage(),
   Pages.RepoDetail.toString(): (context) => RepoDetailPage(),
   Pages.CodeView.toString(): (context) => CodeViewPage(),

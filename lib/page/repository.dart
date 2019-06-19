@@ -3,7 +3,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
-import '../api/service.dart';
 import '../common/config.dart';
 import '../common/emums.dart';
 import '../widget/activity_item.dart';
@@ -47,39 +46,46 @@ class _RepositoryPageState extends State<RepositoryPage> {
   _loadData() async {
     switch (_repos) {
       case Repos.Mine:
+        if (mounted) {
+          setState(() {
+            _title = "我的仓库";
+          });
+        }
         var list = await defaultClient.repositories
             .listUserRepositories(currentUser.login)
             .toList();
-
-        setState(() {
-          _repositories.addAll(list);
-          _loaded = true;
-          _title = "我的仓库";
-        });
+        if (mounted) {
+          setState(() {
+            _repositories.addAll(list);
+            _loaded = true;
+          });
+        }
         break;
       case Repos.Starred:
-        var list =
-            await listStarredRepositoriesByUser(currentUser.login).toList();
-
-        setState(() {
-          _repositories.addAll(list);
-          _loaded = true;
-          _title = "星标仓库";
-        });
-        break;
-      case Repos.Trending:
-        //TODO trending
-        var list = await defaultClient.repositories
-            .listRepositories(type: "public")
+        if (mounted) {
+          setState(() {
+            _title = "星标仓库";
+          });
+        }
+        // var list =
+        //     await listStarredRepositoriesByUser(currentUser.login).toList();
+        var list = await defaultClient.activity
+            .listStarredByUser(currentUser.login)
             .toList();
-        setState(() {
-          _repositories.addAll(list);
-          _loaded = true;
-          _title = "趋势仓库";
-        });
-
+        if (mounted) {
+          setState(() {
+            _repositories.addAll(list);
+            _loaded = true;
+            _title = "星标仓库";
+          });
+        }
         break;
       case Repos.Topic:
+        if (mounted) {
+          setState(() {
+            _title = "主题 " + _topic;
+          });
+        }
         var list =
             await defaultClient.search.repositories("topic:" + _topic).toList();
         setState(() {
@@ -128,6 +134,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   bool _fileLoaded = false;
   bool _eventLoaded = false;
   bool _commitLoaded = false;
+  bool _isStarred = false;
 
   _RepoDetailPageState() {
     _tabController = TabController(length: 4, vsync: this);
@@ -141,25 +148,39 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     _listFiles();
     _listEvents();
     _listCommits();
+    _loadIsStarred();
+  }
+
+  void _loadIsStarred() async {
+    var isStarred = await defaultClient.activity.isStarred(_repo.slug());
+    if (mounted) {
+      setState(() {
+        _isStarred = isStarred;
+      });
+    }
   }
 
   void _getReadme() async {
     try {
       var file = await defaultClient.repositories.getReadme(_repo.slug());
       var str = file.text;
-      setState(() {
-        _readme = str;
-      });
+      if (mounted) {
+        setState(() {
+          _readme = str;
+        });
+      }
     } catch (e) {
       print(e);
     }
   }
 
   void _listFiles() async {
-    setState(() {
-      _fileLoaded = false;
-      _files.clear();
-    });
+    if (mounted) {
+      setState(() {
+        _fileLoaded = false;
+        _files.clear();
+      });
+    }
     try {
       var contents =
           await defaultClient.repositories.getContents(_repo.slug(), _path);
@@ -175,9 +196,11 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           ..type = "dir";
         _files.insert(0, parent);
       }
-      setState(() {
-        _fileLoaded = true;
-      });
+      if (mounted) {
+        setState(() {
+          _fileLoaded = true;
+        });
+      }
     } catch (e) {
       print(e);
     }
@@ -188,9 +211,11 @@ class _RepoDetailPageState extends State<RepoDetailPage>
       var commits =
           await defaultClient.repositories.listCommits(_repo.slug()).toList();
       _commits.addAll(commits);
-      setState(() {
-        _commitLoaded = true;
-      });
+      if (mounted) {
+        setState(() {
+          _commitLoaded = true;
+        });
+      }
     } catch (e) {}
   }
 
@@ -200,9 +225,11 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           .listRepositoryEvents(_repo.slug())
           .toList();
       _events.addAll(events);
-      setState(() {
-        _eventLoaded = true;
-      });
+      if (mounted) {
+        setState(() {
+          _eventLoaded = true;
+        });
+      }
     } catch (e) {}
   }
 
@@ -249,6 +276,15 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     return ActivityListItem(event);
   }
 
+  void _handleClickStar() async {
+    if (_isStarred) {
+      await defaultClient.activity.unstar(_repo.slug());
+    } else {
+      await defaultClient.activity.star(_repo.slug());
+    }
+    _loadIsStarred();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -256,13 +292,13 @@ class _RepoDetailPageState extends State<RepoDetailPage>
         title: Text(_repo.name),
         actions: <Widget>[
           FlatButton(
-            child: Icon(Icons.star),
-            onPressed: () {},
+            clipBehavior: Clip.hardEdge,
+            child: Icon(
+              _isStarred ? Icons.star : Icons.star_border,
+              color: Colors.white70,
+            ),
+            onPressed: _handleClickStar,
           ),
-          FlatButton(
-            child: Icon(Icons.call_split),
-            onPressed: () {},
-          )
         ],
         bottom: TabBar(controller: _tabController, tabs: [
           Tab(

@@ -29,10 +29,12 @@ class _ActivityPageState extends State<ActivityPage> {
   _loadMoreData() async {
     var events =
         await listPublicEventsReceivedByUser(currentUser.login).toList();
-    setState(() {
-      _events.addAll(events);
-      _loaded = true;
-    });
+    if (mounted) {
+      setState(() {
+        _events.addAll(events);
+        _loaded = true;
+      });
+    }
   }
 
   Widget _createItem(BuildContext context, int index) {

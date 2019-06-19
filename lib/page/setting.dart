@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../common/config.dart';
 
 class SettingPage extends StatefulWidget {
@@ -27,7 +26,11 @@ class _SettingPageState extends State<SettingPage> {
           name,
           style: TextStyle(color: color),
         ),
-        trailing: Icon(iconData),
+        trailing: Radio(
+          value: color,
+          groupValue: model.themeColor,
+          onChanged: (value) {},
+        ),
         onTap: () {
           model.themeColor = color;
           sharedPreferences.setString("themeColor", name);
