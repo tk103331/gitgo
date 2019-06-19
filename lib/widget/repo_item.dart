@@ -42,7 +42,7 @@ class RepoListItem extends StatelessWidget {
       ),
       onTap: () {
         Navigator.of(context)
-            .pushNamed(Pages.RepoDetail.toString(), arguments: _repo);
+            .pushNamed(Pages.RepoDetail.toString(), arguments: _repo.slug());
       },
     ));
   }

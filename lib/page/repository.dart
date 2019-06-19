@@ -126,6 +126,7 @@ class RepoDetailPage extends StatefulWidget {
 class _RepoDetailPageState extends State<RepoDetailPage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+  github.RepositorySlug _repoSlug;
   github.Repository _repo;
   List<github.GitHubFile> _files = List();
   List<github.Event> _events = List();
@@ -144,7 +145,15 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _repo = ModalRoute.of(context).settings.arguments as github.Repository;
+    _repoSlug = ModalRoute.of(context).settings.arguments as github.RepositorySlug;
+    _loadData();
+  }
+
+  void _loadData() async {
+    var repo = await defaultClient.repositories.getRepository(_repoSlug);
+    setState(() {
+      _repo = repo;
+    });
     _getReadme();
     _listFiles();
     _listEvents();
@@ -292,7 +301,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_repo.name),
+        title: Text(_repoSlug?.name ?? ""),
         actions: <Widget>[
           FlatButton(
             clipBehavior: Clip.hardEdge,
