@@ -14,8 +14,9 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    loadSharedPreferences();
     return ScopedModel<SettingModel>(
-        model: SettingModel(),
+        model: settingModel,
         child: new ScopedModelDescendant<SettingModel>(
             builder: (context, child, model) {
           return MaterialApp(
@@ -41,7 +42,7 @@ class _MainPageState extends State<MainPage> {
     super.initState();
 
     Future.delayed(Duration(seconds: 1)).then((a) async {
-      var refs = await SharedPreferences.getInstance();
+      var refs = sharedPreferences;
       var user = refs.getString("username");
       var pswd = refs.getString("password");
       if (user != null && user.isNotEmpty && pswd != null && pswd.isNotEmpty) {
