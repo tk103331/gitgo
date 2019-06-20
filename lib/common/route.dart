@@ -7,10 +7,11 @@ import '../page/code.dart';
 import '../page/issue.dart';
 import '../page/notification.dart';
 import '../page/profile.dart';
+import '../page/repo_detail.dart';
 import '../page/repository.dart';
 import '../page/search.dart';
-import '../page/topic.dart';
 import '../page/setting.dart';
+import '../page/topic.dart';
 
 Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Activity.toString(): (context) => ActivityPage(),
