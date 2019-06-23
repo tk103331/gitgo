@@ -179,7 +179,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   }
 
   Widget _createActivityItem(BuildContext context, int index) {
-    var event = _events[0];
+    var event = _events[index];
     return ActivityListItem(event);
   }
 

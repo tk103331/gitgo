@@ -13,7 +13,10 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
   String _userName = "";
   User _user = null;
   List<Event> _events = List();
@@ -21,6 +24,10 @@ class _ProfilePageState extends State<ProfilePage> {
   List<Repository> _repos = List();
   bool _repoLoaded = false;
   bool _userLoaded = false;
+
+  _ProfilePageState() {
+    _tabController = TabController(length: 3, vsync: this);
+  }
 
   @override
   void didChangeDependencies() {
@@ -78,124 +85,88 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("个人主页"),
-      ),
-      drawer: MainDrawer,
-      body: IndicatorContainer(
-        showChild: _userLoaded,
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: 100,
-              decoration:
-                  BoxDecoration(color: Theme.of(context).primaryColorLight),
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Image.network(
-                      _user?.avatarUrl ?? "",
-                      width: 64,
-                    ),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(_user?.login ?? ""),
-                          Text(_user?.location ?? ""),
-                          Text(_user?.createdAt?.toString() ?? "")
-                        ],
-                      ))
-                ],
+        appBar: AppBar(
+          title: Text("个人主页"),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: <Widget>[
+              Tab(
+                child: Text("信息"),
               ),
-            ),
-            Container(
-                height: (MediaQuery.of(context).size.height - 189),
-                child: DefaultTabController(
-                  length: 3,
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        color: Theme.of(context).primaryColorLight,
-                        height: 40,
-                        child: TabBar(
-                          tabs: <Widget>[
-                            Tab(
-                              child: Text("信息"),
-                            ),
-                            Tab(
-                              child: Text("活动"),
-                            ),
-                            Tab(
-                              child: Text("星标"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: TabBarView(children: <Widget>[
-                          Container(
-                            child: Container(
-                                padding: EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      _user?.name ?? "",
-                                      style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        _createCountButton(
-                                            "关注我的",
-                                            _user?.followersCount?.toString() ??
-                                                ""),
-                                        _createCountButton(
-                                            "我关注的",
-                                            _user?.followingCount?.toString() ??
-                                                ""),
-                                        _createCountButton(
-                                            "公开仓库",
-                                            _user?.publicReposCount
-                                                    ?.toString() ??
-                                                ""),
-                                        _createCountButton(
-                                            "公开Gist",
-                                            _user?.publicGistsCount
-                                                    ?.toString() ??
-                                                ""),
-                                      ],
-                                    )
-                                  ],
-                                )),
-                          ),
-                          IndicatorContainer(
-                            showChild: _eventLoaded,
-                            child: ListView.builder(
-                                itemCount: _events.length,
-                                itemBuilder: _createActivityItem),
-                          ),
-                          IndicatorContainer(
-                              showChild: _repoLoaded,
-                              child: ListView.builder(
-                                  itemCount: _repos.length,
-                                  itemBuilder: _createRepoItem))
-                        ]),
-                      )
-                    ],
-                  ),
-                ))
-          ],
+              Tab(
+                child: Text("活动"),
+              ),
+              Tab(
+                child: Text("星标"),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+        drawer: MainDrawer,
+        body: TabBarView(controller: _tabController, children: <Widget>[
+          Container(
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColorLight),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Image.network(
+                              _user?.avatarUrl ?? "",
+                              width: 64,
+                            ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(_user?.login ?? ""),
+                                  Text(_user?.location ?? ""),
+                                  Text(_user?.createdAt?.toString() ?? "")
+                                ],
+                              ))
+                        ],
+                      ),
+                    ),
+                    Text(
+                      _user?.name ?? "",
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        _createCountButton(
+                            "关注我的", _user?.followersCount?.toString() ?? ""),
+                        _createCountButton(
+                            "我关注的", _user?.followingCount?.toString() ?? ""),
+                        _createCountButton(
+                            "公开仓库", _user?.publicReposCount?.toString() ?? ""),
+                        _createCountButton("公开Gist",
+                            _user?.publicGistsCount?.toString() ?? ""),
+                      ],
+                    )
+                  ],
+                )),
+          ),
+          IndicatorContainer(
+            showChild: _eventLoaded,
+            child: ListView.builder(
+                itemCount: _events.length, itemBuilder: _createActivityItem),
+          ),
+          IndicatorContainer(
+              showChild: _repoLoaded,
+              child: ListView.builder(
+                  itemCount: _repos.length, itemBuilder: _createRepoItem))
+        ]));
   }
 
   Widget _createActivityItem(BuildContext context, int index) {
