@@ -82,29 +82,24 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   }
 
   void _listFiles() async {
-    if (mounted) {
-      setState(() {
-        _fileLoaded = false;
-        _files.clear();
-      });
-    }
+    List<github.GitHubFile> files = new List();
     try {
       var contents =
           await defaultClient.repositories.getContents(_repo.slug(), _path);
-
       if (contents.isFile) {
-        _files.add(contents.file);
+        files.add(contents.file);
       } else if (contents.isDirectory) {
-        _files.addAll(contents.tree);
+        files.addAll(contents.tree);
       }
-      if (_files.length > 0) {
+      if (files.length > 0) {
         var parent = github.GitHubFile()
           ..name = ".."
           ..type = "dir";
-        _files.insert(0, parent);
+        files.insert(0, parent);
       }
       if (mounted) {
         setState(() {
+          _files = files;
           _fileLoaded = true;
         });
       }
@@ -216,7 +211,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           appBar: AppBar(
             title: Text(href),
             actions: <Widget>[
-              FlatButton(child: Icon(Icons.open_in_browser), onPressed: () {
+              IconButton(icon: Icon(Icons.open_in_browser), onPressed: () {
                 _launchUrl(href);
               },)
             ],
@@ -244,9 +239,8 @@ class _RepoDetailPageState extends State<RepoDetailPage>
       appBar: AppBar(
         title: Text(_repoSlug?.name ?? ""),
         actions: <Widget>[
-          FlatButton(
-            clipBehavior: Clip.hardEdge,
-            child: Icon(
+          IconButton(
+            icon: Icon(
               _isStarred ? Icons.star : Icons.star_border,
               color: Colors.white70,
             ),

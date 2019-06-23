@@ -32,11 +32,9 @@ class _TopicPageState extends State<TopicPage> {
   }
 
   Widget _createItem(BuildContext context, int index) {
-    if (index % 2 == 1) {
-      return Divider();
-    }
-    var topic = _topics[index ~/ 2];
-    return ListTile(
+    var topic = _topics[index];
+    return Card(
+        child: ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -51,7 +49,7 @@ class _TopicPageState extends State<TopicPage> {
         Navigator.of(context)
             .pushNamed(Pages.TopicRepo.toString(), arguments: args);
       },
-    );
+    ));
   }
 
   @override
@@ -64,7 +62,7 @@ class _TopicPageState extends State<TopicPage> {
         body: IndicatorContainer(
           showChild: _loaded,
           child: ListView.builder(
-              itemCount: _topics.length * 2 - 1, itemBuilder: _createItem),
+              itemCount: _topics.length, itemBuilder: _createItem),
         ));
   }
 }

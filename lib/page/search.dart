@@ -12,13 +12,20 @@ class SearchPage extends StatefulWidget {
   _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageState extends State<SearchPage>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
   bool _repoLoaded = true;
   List<Repository> _repos = List();
   bool _userLoaded = true;
   List<User> _users = List();
   TextEditingController _textEditingController = TextEditingController();
   bool _showActions = false;
+
+  _SearchPageState() {
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   void _search(String key) {
     _searchRepo(key);
@@ -57,15 +64,15 @@ class _SearchPageState extends State<SearchPage> {
         contentPadding: EdgeInsets.all(10),
         leading: Image.network(user.avatarUrl),
         title: Text(user.login),
-        onTap: (){
-          Navigator.of(context).pushNamed(Pages.Profile.toString(), arguments: user);
+        onTap: () {
+          Navigator.of(context)
+              .pushNamed(Pages.Profile.toString(), arguments: user);
         },
       ),
     );
   }
 
   Widget _createRepoItem(BuildContext context, int index) {
-
     var repo = _repos[index];
     return RepoListItem(repo);
   }
@@ -73,8 +80,8 @@ class _SearchPageState extends State<SearchPage> {
   List<Widget> _createActions() {
     if (_showActions) {
       return <Widget>[
-        FlatButton(
-          child: Icon(Icons.close),
+        IconButton(
+          icon: Icon(Icons.close),
           onPressed: () {
             _textEditingController.clear();
             setState(() {
@@ -93,6 +100,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: TextField(
+          style: TextStyle(color: Theme.of(context).primaryColorLight),
           controller: _textEditingController,
           autofocus: true,
           onSubmitted: (value) {
@@ -105,53 +113,38 @@ class _SearchPageState extends State<SearchPage> {
           },
         ),
         actions: _createActions(),
-      ),
-      drawer: MainDrawer,
-      body: Container(
-          child: DefaultTabController(
-        length: 2,
-        child: Column(
-          children: <Widget>[
-            Container(
-                height: 40,
-                decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColor),
-                child: TabBar(
-                  indicatorColor: Colors.black54,
-                  tabs: <Widget>[
-                    Tab(
-                      text: "仓库",
-                    ),
-                    Tab(
-                      text: "用户",
-                    ),
-                  ],
-                )),
-            Expanded(
-              child: Container(
-                child: TabBarView(
-                  children: <Widget>[
-                    IndicatorContainer(
-                      showChild: _repoLoaded,
-                      child: ListView.builder(
-                        itemCount: _repos.length,
-                        itemBuilder: _createRepoItem,
-                      ),
-                    ),
-                    IndicatorContainer(
-                      showChild: _userLoaded,
-                      child: ListView.builder(
-                        itemCount: _users.length,
-                        itemBuilder: _createUserItem,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(
+              text: "仓库",
+            ),
+            Tab(
+              text: "用户",
+            ),
           ],
         ),
-      )),
+      ),
+      drawer: MainDrawer,
+      body: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          IndicatorContainer(
+            showChild: _repoLoaded,
+            child: ListView.builder(
+              itemCount: _repos.length,
+              itemBuilder: _createRepoItem,
+            ),
+          ),
+          IndicatorContainer(
+            showChild: _userLoaded,
+            child: ListView.builder(
+              itemCount: _users.length,
+              itemBuilder: _createUserItem,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
