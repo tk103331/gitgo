@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/common/emums.dart';
+import 'package:gitgo/model/bookmark.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
@@ -24,6 +26,7 @@ class _ProfilePageState extends State<ProfilePage>
   List<Repository> _repos = List();
   bool _repoLoaded = false;
   bool _userLoaded = false;
+  bool _isBookmarked = false;
 
   _ProfilePageState() {
     _tabController = TabController(length: 3, vsync: this);
@@ -36,17 +39,17 @@ class _ProfilePageState extends State<ProfilePage>
     _loadUserData();
     _loadEventData();
     _loadRepoData();
+    _loadIsBookmarked();
     super.didChangeDependencies();
   }
 
   void _loadUserData() async {
     _user = await defaultClient.users.getUser(_userName);
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _userLoaded = true;
       });
     }
-
   }
 
   void _loadEventData() async {
@@ -85,11 +88,35 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
+  void _loadIsBookmarked() async {
+    int index = bookmarks.indexWhere((bookmark) {
+      return bookmark != null &&
+          bookmark.type == BookmarkType.User &&
+          bookmark.user == _userName;
+    });
+    setState(() {
+      _isBookmarked = index > -1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text("个人主页"),
+          actions: <Widget>[
+            IconButton(
+              icon:
+                  Icon(_isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+              onPressed: () {
+                var bookmark = Bookmark(BookmarkType.User)
+                ..user = _userName;
+                addBookmark(bookmark);
+
+                _loadIsBookmarked();
+              },
+            )
+          ],
           bottom: TabBar(
             controller: _tabController,
             tabs: <Widget>[

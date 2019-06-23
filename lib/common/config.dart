@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:gitgo/model/bookmark.dart';
 import 'package:github/server.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +14,7 @@ CurrentUser currentUser = null;
 const Widget MainDrawer = const NavDrawer();
 SharedPreferences sharedPreferences = null;
 SettingModel settingModel = new SettingModel();
+List<Bookmark> bookmarks = List();
 
 void loadSharedPreferences() async {
   sharedPreferences = await SharedPreferences.getInstance();
@@ -33,6 +37,42 @@ void loadSharedPreferences() async {
     });
   }
 
+  loadBookmarks();
+}
+
+void loadBookmarks() {
+  String bookmarkJson = sharedPreferences.getString("bookmarks");
+  var list = jsonDecode(bookmarkJson) as List;
+  list.forEach((item) {
+    var input = jsonDecode(item) as Map<String, dynamic>;
+    var bookmark = Bookmark.fromJson(input);
+    if (bookmark != null) {
+      bookmarks.add(bookmark);
+    }
+  });
+}
+
+void addBookmark(Bookmark bookmark) {
+  bookmarks.removeWhere((item) {
+    return bookmark == item || (
+      item.type == bookmark.type
+        && item.user == bookmark.user
+        && item.repo == bookmark.repo
+    );
+  });
+  bookmarks.add(bookmark);
+  sharedPreferences.setString("bookmarks", jsonEncode(bookmarks));
+}
+
+void delBookmark(Bookmark bookmark) {
+  bookmarks.removeWhere((item) {
+    return bookmark == item || (
+        item.type == bookmark.type
+            && item.user == bookmark.user
+            && item.repo == bookmark.repo
+    );
+  });
+  sharedPreferences.setString("bookmarks", jsonEncode(bookmarks));
 }
 
 class SettingModel extends Model {
@@ -56,6 +96,7 @@ class SettingModel extends Model {
   get firstPage {
     return _firstPage;
   }
+
 }
 
 final Map<Color, String> themeColors = <Color, String>{

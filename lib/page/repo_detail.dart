@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:gitgo/common/config.dart';
+import 'package:gitgo/model/bookmark.dart';
 import 'package:github/server.dart' as github;
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
@@ -29,6 +31,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   bool _eventLoaded = false;
   bool _commitLoaded = false;
   bool _isStarred = false;
+  bool _isBookmarked = false;
 
   _RepoDetailPageState() {
     _tabController = TabController(length: 4, vsync: this);
@@ -44,7 +47,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
 
   void _loadData() async {
     var repo = await defaultClient.repositories.getRepository(_repoSlug);
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _repo = repo;
       });
@@ -54,8 +57,6 @@ class _RepoDetailPageState extends State<RepoDetailPage>
       _listCommits();
       _loadIsStarred();
     }
-
-
   }
 
   void _loadIsStarred() async {
@@ -194,7 +195,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     var handled = false;
     if (href != null && href.length > 20) {
       var pos = href.indexOf("github.com/");
-      if ( pos > -1) {
+      if (pos > -1) {
         var name = href.substring(pos + 11);
         if (name.split("/").length == 2) {
           var slug = github.RepositorySlug.full(name);
@@ -211,16 +212,18 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           appBar: AppBar(
             title: Text(href),
             actions: <Widget>[
-              IconButton(icon: Icon(Icons.open_in_browser), onPressed: () {
-                _launchUrl(href);
-              },)
+              IconButton(
+                icon: Icon(Icons.open_in_browser),
+                onPressed: () {
+                  _launchUrl(href);
+                },
+              )
             ],
           ),
           url: href,
           initialChild: Center(
             child: CircularProgressIndicator(),
           ),
-
         );
       }));
     }
@@ -228,9 +231,20 @@ class _RepoDetailPageState extends State<RepoDetailPage>
 
   void _launchUrl(String url) async {
     var can = await url_launcher.canLaunch(url);
-    if(can) {
+    if (can) {
       await url_launcher.launch(url);
     }
+  }
+
+  void _loadIsBookmarked() async {
+    int index = bookmarks.indexWhere((bookmark) {
+      return bookmark != null &&
+          bookmark.type == BookmarkType.Repository &&
+          bookmark.repo == _repoSlug.fullName;
+    });
+    setState(() {
+      _isBookmarked = index > -1;
+    });
   }
 
   @override
@@ -246,6 +260,15 @@ class _RepoDetailPageState extends State<RepoDetailPage>
             ),
             onPressed: _handleClickStar,
           ),
+          IconButton(
+            icon: Icon(_isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+            onPressed: () {
+              var bookmark = Bookmark(BookmarkType.Repository)
+                ..repo = _repoSlug.fullName;
+              addBookmark(bookmark);
+              _loadIsBookmarked();
+            },
+          )
         ],
         bottom: TabBar(controller: _tabController, tabs: [
           Tab(
