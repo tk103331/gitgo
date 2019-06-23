@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> {
       if (user != null && user.isNotEmpty && pswd != null && pswd.isNotEmpty) {
         var success = await login(user, pswd);
         if (success) {
-          Navigator.of(context).pushReplacementNamed(Pages.Activity.toString());
+          routeToFirstPage(context);
           return;
         }
       }

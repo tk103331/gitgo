@@ -10,11 +10,7 @@ enum Pages {
   StarredRepo,
   Bookmark,
   Search,
-  Trace,
-  TrendingRepo,
-  RepoCollection,
   Topic,
-  GlobalActivity,
   RepoDetail,
   CodeView,
   TopicRepo,
@@ -22,3 +18,5 @@ enum Pages {
 }
 
 enum Repos { Mine, Starred, Topic }
+
+enum FirstPage {Profile, Activity, Issue, Notification, MineRepo, StarredRepo, Bookmark, Topic}

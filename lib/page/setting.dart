@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/common/emums.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../common/config.dart';
 
@@ -10,12 +11,7 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   List<Widget> _createColorItems(SettingModel model) {
     List<Widget> items = List();
-    colors.forEach((name, color) {
-      IconData iconData = Icons.radio_button_unchecked;
-      if (color == model.themeColor) {
-        iconData = Icons.radio_button_checked;
-      }
-
+    themeColors.forEach((color, name) {
       items.add(ListTile(
         leading: Container(
           width: 60,
@@ -29,12 +25,38 @@ class _SettingPageState extends State<SettingPage> {
         trailing: Radio(
           value: color,
           groupValue: model.themeColor,
-          onChanged: (value) {},
+          onChanged: (value) {
+            model.themeColor = value;
+            sharedPreferences.setString("themeColor", color.toString());
+          },
         ),
         onTap: () {
           model.themeColor = color;
-          sharedPreferences.setString("themeColor", name);
+          sharedPreferences.setString("themeColor", color.toString());
         },
+      ));
+    });
+    return items;
+  }
+
+  List<Widget> _createPageItems(SettingModel model) {
+    List<Widget> items = List();
+    firstPages.forEach((page, name) {
+      items.add(ListTile(
+        title: Text(name),
+
+        onTap: () {
+          model.firstPage = page;
+          sharedPreferences.setString("firstPage", page.toString());
+        },
+        trailing: Radio(
+          value: page,
+          groupValue: model.firstPage,
+          onChanged: (value) {
+            model.firstPage = value;
+            sharedPreferences.setString("themeColor", page.toString());
+          },
+        ),
       ));
     });
     return items;
@@ -57,7 +79,8 @@ class _SettingPageState extends State<SettingPage> {
                 trailing: Container(
                     width: 60,
                     height: 40,
-                    decoration: BoxDecoration(color: model.themeColor)),
+                    decoration:
+                        BoxDecoration(color: model.themeColor ?? Colors.blue)),
                 onTap: () {
                   showDialog(
                       context: context,
@@ -74,7 +97,21 @@ class _SettingPageState extends State<SettingPage> {
               ListTile(
                 leading: Icon(Icons.home),
                 title: Text("起始页"),
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                            child: Container(
+                                height: 400,
+                                child: ListView(
+                                    children: _createPageItems(model))));
+                      });
+                },
+                trailing: Text(
+                  firstPages[model.firstPage] ?? "",
+                  style: TextStyle(color: Theme.of(context).primaryColor),
+                ),
               ),
               Divider(),
             ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/common/route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/auth.dart';
@@ -25,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
       refs.setString("username", _username);
       refs.setString("password", _password);
 
-      Navigator.of(context).pushReplacementNamed(Pages.Activity.toString());
+      routeToFirstPage(context);
     }
   }
 

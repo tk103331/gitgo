@@ -12,6 +12,7 @@ import '../page/repository.dart';
 import '../page/search.dart';
 import '../page/setting.dart';
 import '../page/topic.dart';
+import 'config.dart';
 
 Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Activity.toString(): (context) => ActivityPage(),
@@ -28,3 +29,36 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.TopicRepo.toString(): (context) => RepositoryPage(Repos.Topic),
   Pages.Setting.toString(): (context) => SettingPage(),
 };
+
+void routeToFirstPage(BuildContext context) {
+  var page = settingModel.firstPage;
+
+  switch(page) {
+    case FirstPage.Activity:
+      Navigator.of(context).pushReplacementNamed(Pages.Activity.toString());
+      break;
+    case FirstPage.Profile:
+      Navigator.of(context).pushReplacementNamed(Pages.Profile.toString(), arguments: currentUser);
+      break;
+    case FirstPage.Notification:
+      Navigator.of(context).pushReplacementNamed(Pages.Notification.toString());
+      break;
+    case FirstPage.Issue:
+      Navigator.of(context).pushReplacementNamed(Pages.Issue.toString());
+      break;
+    case FirstPage.MineRepo:
+      Navigator.of(context).pushReplacementNamed(Pages.MineRepo.toString());
+      break;
+    case FirstPage.StarredRepo:
+      Navigator.of(context).pushReplacementNamed(Pages.StarredRepo.toString());
+      break;
+    case FirstPage.Bookmark:
+      Navigator.of(context).pushReplacementNamed(Pages.Bookmark.toString());
+      break;
+    case FirstPage.Topic:
+      Navigator.of(context).pushReplacementNamed(Pages.Topic.toString());
+      break;
+    default:
+      Navigator.of(context).pushReplacementNamed(Pages.Activity.toString());
+  }
+}

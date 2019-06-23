@@ -25,7 +25,7 @@ class NavDrawer extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(Icons.camera),
-          title: Text("动态"),
+          title: Text("活动"),
           onTap: () {
             Navigator.of(context)
                 .pushReplacementNamed(Pages.Activity.toString());

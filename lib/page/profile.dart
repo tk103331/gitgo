@@ -41,9 +41,12 @@ class _ProfilePageState extends State<ProfilePage>
 
   void _loadUserData() async {
     _user = await defaultClient.users.getUser(_userName);
-    setState(() {
-      _userLoaded = true;
-    });
+    if(mounted) {
+      setState(() {
+        _userLoaded = true;
+      });
+    }
+
   }
 
   void _loadEventData() async {
