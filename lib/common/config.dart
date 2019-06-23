@@ -40,31 +40,7 @@ void loadSharedPreferences() async {
   loadBookmarks();
 }
 
-void loadBookmarks() {
-  String bookmarkJson = sharedPreferences.getString("bookmarks");
-  var list = jsonDecode(bookmarkJson) as List;
-  list.forEach((item) {
-    var input = jsonDecode(item) as Map<String, dynamic>;
-    var bookmark = Bookmark.fromJson(input);
-    if (bookmark != null) {
-      bookmarks.add(bookmark);
-    }
-  });
-}
-
-void addBookmark(Bookmark bookmark) {
-  bookmarks.removeWhere((item) {
-    return bookmark == item || (
-      item.type == bookmark.type
-        && item.user == bookmark.user
-        && item.repo == bookmark.repo
-    );
-  });
-  bookmarks.add(bookmark);
-  sharedPreferences.setString("bookmarks", jsonEncode(bookmarks));
-}
-
-void delBookmark(Bookmark bookmark) {
+void _removeBookmark(Bookmark bookmark) {
   bookmarks.removeWhere((item) {
     return bookmark == item || (
         item.type == bookmark.type
@@ -72,6 +48,29 @@ void delBookmark(Bookmark bookmark) {
             && item.repo == bookmark.repo
     );
   });
+}
+
+void loadBookmarks() {
+  String bookmarkJson = sharedPreferences.getString("bookmarks");
+  var list = jsonDecode(bookmarkJson) as List;
+  list.forEach((item) {
+    var input = jsonDecode(item) as Map<String, dynamic>;
+    var bookmark = Bookmark.fromJson(input);
+    if (bookmark != null) {
+      _removeBookmark(bookmark);
+      bookmarks.add(bookmark);
+    }
+  });
+}
+
+void addBookmark(Bookmark bookmark) {
+  _removeBookmark(bookmark);
+  bookmarks.add(bookmark);
+  sharedPreferences.setString("bookmarks", jsonEncode(bookmarks));
+}
+
+void delBookmark(Bookmark bookmark) {
+  _removeBookmark(bookmark);
   sharedPreferences.setString("bookmarks", jsonEncode(bookmarks));
 }
 
