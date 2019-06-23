@@ -265,7 +265,11 @@ class _RepoDetailPageState extends State<RepoDetailPage>
             onPressed: () {
               var bookmark = Bookmark(BookmarkType.Repository)
                 ..repo = _repoSlug.fullName;
-              addBookmark(bookmark);
+              if(_isBookmarked) {
+                delBookmark(bookmark);
+              } else {
+                addBookmark(bookmark);
+              }
               _loadIsBookmarked();
             },
           )

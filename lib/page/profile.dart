@@ -111,8 +111,11 @@ class _ProfilePageState extends State<ProfilePage>
               onPressed: () {
                 var bookmark = Bookmark(BookmarkType.User)
                 ..user = _userName;
-                addBookmark(bookmark);
-
+                if(_isBookmarked) {
+                  delBookmark(bookmark);
+                } else {
+                  addBookmark(bookmark);
+                }
                 _loadIsBookmarked();
               },
             )

@@ -53,15 +53,22 @@ class _BookmarkPageState extends State<BookmarkPage> {
         iconData = Icons.account_box;
         break;
     }
-    return Card(
-      child: ListTile(
-        leading: Icon(iconData),
-        title: Text(bookmark.user),
-        onTap: () {
-          _routeTo(bookmark);
+    return Dismissible(
+        key: Key(bookmark.toJson()),
+        onDismissed: (direction) {
+          _bookmarks.removeAt(index);
+          delBookmark(bookmark);
+          _loadData();
         },
-      ),
-    );
+        child: Card(
+          child: ListTile(
+            leading: Icon(iconData),
+            title: Text(bookmark.user),
+            onTap: () {
+              _routeTo(bookmark);
+            },
+          ),
+        ));
   }
 
   @override
