@@ -54,7 +54,7 @@ class _SettingPageState extends State<SettingPage> {
           groupValue: model.firstPage,
           onChanged: (value) {
             model.firstPage = value;
-            sharedPreferences.setString("themeColor", page.toString());
+            sharedPreferences.setString("firstPage", page.toString());
           },
         ),
       ));

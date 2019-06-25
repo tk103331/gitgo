@@ -45,12 +45,15 @@ class _BookmarkPageState extends State<BookmarkPage> {
   Widget _createItem(BuildContext context, int index) {
     var bookmark = _bookmarks[index];
     IconData iconData;
+    String title;
     switch (bookmark.type) {
       case BookmarkType.Repository:
         iconData = Icons.book;
+        title = bookmark.repo;
         break;
       case BookmarkType.User:
         iconData = Icons.account_box;
+        title = bookmark.user;
         break;
     }
     return Dismissible(
@@ -63,7 +66,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
         child: Card(
           child: ListTile(
             leading: Icon(iconData),
-            title: Text(bookmark.user),
+            title: Text(title),
             onTap: () {
               _routeTo(bookmark);
             },
