@@ -247,6 +247,20 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     });
   }
 
+  Widget _createCountButton(String name, int count) {
+    return FlatButton(
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+        height: 60,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[Text(count.toString()), Text(name)],
+        ),
+      ),
+      onPressed: () {},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -265,7 +279,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
             onPressed: () {
               var bookmark = Bookmark(BookmarkType.Repository)
                 ..repo = _repoSlug.fullName;
-              if(_isBookmarked) {
+              if (_isBookmarked) {
                 delBookmark(bookmark);
               } else {
                 addBookmark(bookmark);
@@ -292,6 +306,38 @@ class _RepoDetailPageState extends State<RepoDetailPage>
       body: TabBarView(controller: _tabController, children: <Widget>[
         Column(
           children: <Widget>[
+            Card(
+              child: Container(
+                padding: EdgeInsets.all(15),
+                  child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Text(
+                          _repo.owner.login,
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pushNamed(Pages.Profile.toString(), arguments: _repo.owner.login);
+                        },
+                      ),
+                      Text("/" + _repo.name)
+                    ],
+                  ),
+                  Text(_repo?.description ?? ""),
+                  Row(
+                    children: <Widget>[
+                      _createCountButton("问题", _repo?.openIssuesCount ?? 0),
+                      _createCountButton("星标", _repo?.stargazersCount ?? 0),
+                      _createCountButton("仓库分支", _repo?.forksCount ?? 0),
+                      _createCountButton("关注者", _repo?.subscribersCount ?? 0),
+                    ],
+                  ),
+                ],
+              )),
+            ),
             Container(
                 height: 30,
                 child: Text(
@@ -300,7 +346,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
                 )),
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 167,
+              height: MediaQuery.of(context).size.height - 313,
               child: Markdown(
                 data: _readme ?? "",
                 onTapLink: (href) {

@@ -66,7 +66,7 @@ class _SearchPageState extends State<SearchPage>
         title: Text(user.login),
         onTap: () {
           Navigator.of(context)
-              .pushNamed(Pages.Profile.toString(), arguments: user);
+              .pushNamed(Pages.Profile.toString(), arguments: user.login);
         },
       ),
     );

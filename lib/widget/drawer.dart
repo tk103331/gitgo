@@ -20,7 +20,7 @@ class NavDrawer extends StatelessWidget {
           title: Text("个人主页"),
           onTap: () {
             Navigator.of(context).pushReplacementNamed(Pages.Profile.toString(),
-                arguments: currentUser);
+                arguments: currentUser.login);
           },
         ),
         ListTile(

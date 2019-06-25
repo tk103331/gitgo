@@ -34,8 +34,11 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   void didChangeDependencies() {
-    var user = ModalRoute.of(context).settings.arguments as User;
-    _userName = user.login;
+    var userName = ModalRoute.of(context).settings.arguments as String;
+    setState(() {
+      _userName = userName;
+    });
+
     _loadUserData();
     _loadEventData();
     _loadRepoData();

@@ -32,7 +32,7 @@ class ActivityListItem extends StatelessWidget {
     if(value is Repository) {
       Navigator.of(context).pushNamed(Pages.RepoDetail.toString(), arguments: RepositorySlug.full(value.name));
     } else if (value is User) {
-      Navigator.of(context).pushNamed(Pages.Profile.toString(), arguments: value);
+      Navigator.of(context).pushNamed(Pages.Profile.toString(), arguments: value.login);
     }
   }
 
