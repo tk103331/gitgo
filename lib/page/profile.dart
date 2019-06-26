@@ -77,17 +77,17 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
-  Widget _createCountButton(String name, String count) {
+  Widget _createCountButton(String name, int count, Function function) {
     return FlatButton(
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
         height: 60,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[Text(count), Text(name)],
+          children: <Widget>[Text(count.toString()), Text(name)],
         ),
       ),
-      onPressed: () {},
+      onPressed: function,
     );
   }
 
@@ -112,9 +112,8 @@ class _ProfilePageState extends State<ProfilePage>
               icon:
                   Icon(_isBookmarked ? Icons.bookmark : Icons.bookmark_border),
               onPressed: () {
-                var bookmark = Bookmark(BookmarkType.User)
-                ..user = _userName;
-                if(_isBookmarked) {
+                var bookmark = Bookmark(BookmarkType.User)..user = _userName;
+                if (_isBookmarked) {
                   delBookmark(bookmark);
                 } else {
                   addBookmark(bookmark);
@@ -142,14 +141,11 @@ class _ProfilePageState extends State<ProfilePage>
         body: TabBarView(controller: _tabController, children: <Widget>[
           Container(
             child: Container(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight),
+                    Card(
                       child: Row(
                         children: <Widget>[
                           Padding(
@@ -172,23 +168,52 @@ class _ProfilePageState extends State<ProfilePage>
                         ],
                       ),
                     ),
-                    Text(
-                      _user?.name ?? "",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        _createCountButton(
-                            "关注我的", _user?.followersCount?.toString() ?? ""),
-                        _createCountButton(
-                            "我关注的", _user?.followingCount?.toString() ?? ""),
-                        _createCountButton(
-                            "公开仓库", _user?.publicReposCount?.toString() ?? ""),
-                        _createCountButton("公开Gist",
-                            _user?.publicGistsCount?.toString() ?? ""),
-                      ],
+                    Card(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              _user?.name ?? "",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              _createCountButton(
+                                  "关注我的", _user?.followersCount ?? 0, () {
+                                Navigator.of(context).pushNamed(
+                                    Pages.User.toString(),
+                                    arguments: {
+                                      "type": Users.Follower,
+                                      "user": _user.login
+                                    });
+                              }),
+                              _createCountButton(
+                                  "我关注的", _user?.followingCount ?? 0, () {
+                                Navigator.of(context).pushNamed(
+                                    Pages.User.toString(),
+                                    arguments: {
+                                      "type": Users.Follower,
+                                      "user": _user.login
+                                    });
+                              }),
+                              _createCountButton(
+                                  "公开仓库", _user?.publicReposCount ?? 0, () {
+                                Navigator.of(context).pushReplacementNamed(
+                                    Pages.UserRepo.toString(),
+                                    arguments: {"user": _user.login});
+                              }),
+                              _createCountButton("公开Gist",
+                                  _user?.publicGistsCount ?? 0, () {}),
+                            ],
+                          )
+                        ],
+                      ),
                     )
                   ],
                 )),

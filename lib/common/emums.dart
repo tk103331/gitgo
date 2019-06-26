@@ -7,6 +7,7 @@ enum Pages {
   Issue,
   Notification,
   MineRepo,
+  UserRepo,
   StarredRepo,
   Bookmark,
   Search,
@@ -15,9 +16,12 @@ enum Pages {
   CodeView,
   TopicRepo,
   Setting,
+  User
 }
 
-enum Repos { Mine, Starred, Topic }
+enum Repos { Mine, Starred, Topic, User}
+
+enum Users { Follower, Following, Stargazer, Watcher}
 
 enum FirstPage {Profile, Activity, Issue, Notification, MineRepo, StarredRepo, Bookmark, Topic}
 

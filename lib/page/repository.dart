@@ -22,6 +22,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
   String _title = "我的仓库";
   bool _loaded = false;
   String _topic = "";
+  String _user = "";
 
   _RepositoryPageState(this._repos);
 
@@ -37,12 +38,29 @@ class _RepositoryPageState extends State<RepositoryPage> {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     if (params != null) {
       _topic = params['topic'] as String;
+      _user = params['user'] as String;
     }
     _loadData();
   }
 
   _loadData() async {
     switch (_repos) {
+      case Repos.User:
+        if (mounted) {
+          setState(() {
+            _title = _user + " - 公告仓库";
+          });
+        }
+        var list = await defaultClient.repositories
+            .listUserRepositories(_user)
+            .toList();
+        if (mounted) {
+          setState(() {
+            _repositories.addAll(list);
+            _loaded = true;
+          });
+        }
+        break;
       case Repos.Mine:
         if (mounted) {
           setState(() {

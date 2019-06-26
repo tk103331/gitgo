@@ -12,6 +12,7 @@ import '../page/repository.dart';
 import '../page/search.dart';
 import '../page/setting.dart';
 import '../page/topic.dart';
+import '../page/user.dart';
 import 'config.dart';
 
 Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
@@ -21,6 +22,7 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Notification.toString(): (context) => NotificationPage(),
   Pages.Profile.toString(): (context) => ProfilePage(),
   Pages.MineRepo.toString(): (context) => RepositoryPage(Repos.Mine),
+  Pages.UserRepo.toString(): (context) => RepositoryPage(Repos.User),
   Pages.StarredRepo.toString(): (context) => RepositoryPage(Repos.Starred),
   Pages.Search.toString(): (context) => SearchPage(),
   Pages.RepoDetail.toString(): (context) => RepoDetailPage(),
@@ -28,17 +30,19 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Topic.toString(): (context) => TopicPage(),
   Pages.TopicRepo.toString(): (context) => RepositoryPage(Repos.Topic),
   Pages.Setting.toString(): (context) => SettingPage(),
+  Pages.User.toString(): (context) => UserPage(),
 };
 
 void routeToFirstPage(BuildContext context) {
   var page = settingModel.firstPage;
 
-  switch(page) {
+  switch (page) {
     case FirstPage.Activity:
       Navigator.of(context).pushReplacementNamed(Pages.Activity.toString());
       break;
     case FirstPage.Profile:
-      Navigator.of(context).pushReplacementNamed(Pages.Profile.toString(), arguments: currentUser);
+      Navigator.of(context).pushReplacementNamed(Pages.Profile.toString(),
+          arguments: currentUser);
       break;
     case FirstPage.Notification:
       Navigator.of(context).pushReplacementNamed(Pages.Notification.toString());

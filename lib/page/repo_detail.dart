@@ -41,7 +41,10 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _repoSlug =
-        ModalRoute.of(context).settings.arguments as github.RepositorySlug;
+    ModalRoute
+        .of(context)
+        .settings
+        .arguments as github.RepositorySlug;
     _loadData();
   }
 
@@ -86,7 +89,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     List<github.GitHubFile> files = new List();
     try {
       var contents =
-          await defaultClient.repositories.getContents(_repo.slug(), _path);
+      await defaultClient.repositories.getContents(_repo.slug(), _path);
       if (contents.isFile) {
         files.add(contents.file);
       } else if (contents.isDirectory) {
@@ -112,7 +115,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   void _listCommits() async {
     try {
       var commits =
-          await defaultClient.repositories.listCommits(_repo.slug()).toList();
+      await defaultClient.repositories.listCommits(_repo.slug()).toList();
       _commits.addAll(commits);
       if (mounted) {
         setState(() {
@@ -197,7 +200,9 @@ class _RepoDetailPageState extends State<RepoDetailPage>
       var pos = href.indexOf("github.com/");
       if (pos > -1) {
         var name = href.substring(pos + 11);
-        if (name.split("/").length == 2) {
+        if (name
+            .split("/")
+            .length == 2) {
           var slug = github.RepositorySlug.full(name);
           Navigator.of(context)
               .pushNamed(Pages.RepoDetail.toString(), arguments: slug);
@@ -247,17 +252,17 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     });
   }
 
-  Widget _createCountButton(String name, int count) {
+  Widget _createCountButton(String name, int count, Function function) {
     return FlatButton(
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-        height: 60,
+        height: 50,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[Text(count.toString()), Text(name)],
         ),
       ),
-      onPressed: () {},
+      onPressed: function,
     );
   }
 
@@ -308,52 +313,67 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           children: <Widget>[
             Card(
               child: Container(
-                padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.all(15),
                   child: Column(
-                children: <Widget>[
-                  Row(
                     children: <Widget>[
-                      GestureDetector(
-                        child: Text(
-                          _repo.owner.login,
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pushNamed(Pages.Profile.toString(), arguments: _repo.owner.login);
-                        },
+                      Row(
+                        children: <Widget>[
+                          GestureDetector(
+                            child: Text(
+                              _repo?.owner?.login ?? "",
+                              style: TextStyle(
+                                  color: Theme
+                                      .of(context)
+                                      .primaryColor),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                  Pages.Profile.toString(),
+                                  arguments: _repo?.owner?.login ?? "");
+                            },
+                          ),
+                          Text("/"),
+                          Text(_repo?.name ?? "")
+                        ],
                       ),
-                      Text("/" + _repo.name)
+                      Text(
+                        _repo?.description ?? "", textAlign: TextAlign.start,),
+                      Row(
+                        children: <Widget>[
+                          _createCountButton(
+                              "问题", _repo?.openIssuesCount ?? 0, () {}),
+                          _createCountButton(
+                              "星标", _repo?.stargazersCount ?? 0, () {
+                            Navigator.of(context).pushNamed(
+                                Pages.User.toString(), arguments: {
+                              "type": Users.Stargazer,
+                              "slug": _repoSlug
+                            });
+                          }),
+                          _createCountButton(
+                              "仓库分支", _repo?.forksCount ?? 0, () {}),
+                          _createCountButton(
+                              "关注者", _repo?.subscribersCount ?? 0, () {
+                            Navigator.of(context).pushNamed(
+                                Pages.User.toString(), arguments: {
+                              "type": Users.Watcher,
+                              "slug": _repoSlug
+                            });
+                          }),
+                        ],
+                      ),
                     ],
-                  ),
-                  Text(_repo?.description ?? ""),
-                  Row(
-                    children: <Widget>[
-                      _createCountButton("问题", _repo?.openIssuesCount ?? 0),
-                      _createCountButton("星标", _repo?.stargazersCount ?? 0),
-                      _createCountButton("仓库分支", _repo?.forksCount ?? 0),
-                      _createCountButton("关注者", _repo?.subscribersCount ?? 0),
-                    ],
-                  ),
-                ],
-              )),
+                  )),
             ),
-            Container(
-                height: 30,
-                child: Text(
-                  "README",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                )),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 313,
-              child: Markdown(
-                data: _readme ?? "",
-                onTapLink: (href) {
-                  _handleTabLink(href);
-                },
-              ),
-            )
+            Expanded(
+                child: Card(
+                  child: Markdown(
+                    data: _readme ?? "",
+                    onTapLink: (href) {
+                      _handleTabLink(href);
+                    },
+                  ),
+                ))
           ],
         ),
         IndicatorContainer(
