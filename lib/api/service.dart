@@ -37,3 +37,7 @@ Future<IssueResult> searchIssues(String query) {
 Future<IssueResult> listUserOpenedIssues(String user) {
   return searchIssues("author:$user");
 }
+
+Stream<User> listUserFollowing(String user) {
+  return PaginationHelper(defaultClient).objects("GET", "/users/$user/following", User.fromJson);
+}

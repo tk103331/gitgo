@@ -185,7 +185,7 @@ class _ProfilePageState extends State<ProfilePage>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               _createCountButton(
-                                  "关注我的", _user?.followersCount ?? 0, () {
+                                  "跟随者", _user?.followersCount ?? 0, () {
                                 Navigator.of(context).pushNamed(
                                     Pages.User.toString(),
                                     arguments: {
@@ -194,11 +194,11 @@ class _ProfilePageState extends State<ProfilePage>
                                     });
                               }),
                               _createCountButton(
-                                  "我关注的", _user?.followingCount ?? 0, () {
+                                  "跟随", _user?.followingCount ?? 0, () {
                                 Navigator.of(context).pushNamed(
                                     Pages.User.toString(),
                                     arguments: {
-                                      "type": Users.Follower,
+                                      "type": Users.Following,
                                       "user": _user.login
                                     });
                               }),
