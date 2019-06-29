@@ -16,7 +16,8 @@ enum Pages {
   CodeView,
   TopicRepo,
   Setting,
-  User
+  User,
+  CommitDetail
 }
 
 enum Repos { Mine, Starred, Topic, User}

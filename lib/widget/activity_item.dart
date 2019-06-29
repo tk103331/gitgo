@@ -9,7 +9,7 @@ class ActivityListItem extends StatelessWidget {
   ActivityListItem(this._event);
 
   void _showPopupMenu(BuildContext context) async {
-    RenderBox box  = context.findRenderObject();
+    RenderBox box = context.findRenderObject();
 
     Offset offset = box.localToGlobal(Offset.zero);
     var screenSize = MediaQuery.of(context).size;
@@ -17,9 +17,17 @@ class ActivityListItem extends StatelessWidget {
 
     var value = await showMenu(
         context: context,
-        position: RelativeRect.fromLTRB(screenSize.width, offset.dy + size.height/2, 0,0),
+        position: RelativeRect.fromLTRB(
+            screenSize.width, offset.dy + size.height / 2, 0, 0),
         items: <PopupMenuItem>[
-          PopupMenuItem(child: Text("跳转到：", style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 14),),enabled: false,),
+          PopupMenuItem(
+            child: Text(
+              "跳转到：",
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor, fontSize: 14),
+            ),
+            enabled: false,
+          ),
           PopupMenuItem(
             child: Text("仓库"),
             value: _event?.repo,
@@ -29,23 +37,24 @@ class ActivityListItem extends StatelessWidget {
             value: _event?.actor,
           )
         ]);
-    if(value is Repository) {
-      Navigator.of(context).pushNamed(Pages.RepoDetail.toString(), arguments: RepositorySlug.full(value.name));
+    if (value is Repository) {
+      Navigator.of(context).pushNamed(Pages.RepoDetail.toString(),
+          arguments: RepositorySlug.full(value.name));
     } else if (value is User) {
-      Navigator.of(context).pushNamed(Pages.Profile.toString(), arguments: value.login);
+      Navigator.of(context)
+          .pushNamed(Pages.Profile.toString(), arguments: value.login);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
+      leading: Image.network(_event?.actor?.avatarUrl ?? ""),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.network(_event?.actor?.avatarUrl ?? "", width: 32, height: 32),
           Text(_event?.actor?.login ?? ""),
           Text(_event?.createdAt?.toLocal().toString() ?? "")
         ],
@@ -56,7 +65,6 @@ class ActivityListItem extends StatelessWidget {
         children: [Text(_event?.type ?? ""), Text(_event?.repo?.name ?? "")],
       ),
       onLongPress: () {
-
         _showPopupMenu(context);
       },
       onTap: () {

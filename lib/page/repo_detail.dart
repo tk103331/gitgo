@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:gitgo/api/service.dart';
 import 'package:gitgo/common/config.dart';
 import 'package:gitgo/model/bookmark.dart';
 import 'package:github/server.dart' as github;
@@ -41,10 +42,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _repoSlug =
-    ModalRoute
-        .of(context)
-        .settings
-        .arguments as github.RepositorySlug;
+        ModalRoute.of(context).settings.arguments as github.RepositorySlug;
     _loadData();
   }
 
@@ -89,7 +87,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     List<github.GitHubFile> files = new List();
     try {
       var contents =
-      await defaultClient.repositories.getContents(_repo.slug(), _path);
+          await defaultClient.repositories.getContents(_repo.slug(), _path);
       if (contents.isFile) {
         files.add(contents.file);
       } else if (contents.isDirectory) {
@@ -114,15 +112,18 @@ class _RepoDetailPageState extends State<RepoDetailPage>
 
   void _listCommits() async {
     try {
-      var commits =
-      await defaultClient.repositories.listCommits(_repo.slug()).toList();
+//      var commits =
+//      await defaultClient.repositories.listCommits(_repo.slug()).toList();
+      var commits = await listRepositoryCommits(_repo.slug()).toList();
       _commits.addAll(commits);
       if (mounted) {
         setState(() {
           _commitLoaded = true;
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void _listEvents() async {
@@ -171,10 +172,39 @@ class _RepoDetailPageState extends State<RepoDetailPage>
 
   Widget _createCommitItem(BuildContext context, int index) {
     var commit = _commits[index];
-    return ListTile(
-        leading: Image.network(commit.committer.avatarUrl),
-        title: Text(commit.committer.login),
-        subtitle: Text(commit.commit.message));
+    return Card(
+      child: ListTile(
+          leading: Image.network(commit?.committer?.avatarUrl??""),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(commit?.committer?.login ?? ""),
+              Text(commit?.commit?.author?.date?.toString() ?? "")
+            ],
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(commit?.commit?.message ?? "", softWrap: true,),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(commit?.sha?.substring(0, 7) ?? ""),
+                  ),
+                  Icon(
+                    Icons.comment,
+                    size: 14,
+                  ),
+                  Text((commit?.commit?.commentCount ?? 0).toString())
+                ],
+              )
+            ],
+          ),
+          onTap: () {
+            Navigator.of(context).pushNamed(Pages.CommitDetail.toString());
+          },
+      ),
+    );
   }
 
   Widget _createActivityItem(BuildContext context, int index) {
@@ -200,9 +230,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
       var pos = href.indexOf("github.com/");
       if (pos > -1) {
         var name = href.substring(pos + 11);
-        if (name
-            .split("/")
-            .length == 2) {
+        if (name.split("/").length == 2) {
           var slug = github.RepositorySlug.full(name);
           Navigator.of(context)
               .pushNamed(Pages.RepoDetail.toString(), arguments: slug);
@@ -322,9 +350,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
                             child: Text(
                               _repo?.owner?.login ?? "",
                               style: TextStyle(
-                                  color: Theme
-                                      .of(context)
-                                      .primaryColor),
+                                  color: Theme.of(context).primaryColor),
                             ),
                             onTap: () {
                               Navigator.of(context).pushNamed(
@@ -337,15 +363,17 @@ class _RepoDetailPageState extends State<RepoDetailPage>
                         ],
                       ),
                       Text(
-                        _repo?.description ?? "", textAlign: TextAlign.start,),
+                        _repo?.description ?? "",
+                        textAlign: TextAlign.start,
+                      ),
                       Row(
                         children: <Widget>[
                           _createCountButton(
                               "问题", _repo?.openIssuesCount ?? 0, () {}),
-                          _createCountButton(
-                              "星标", _repo?.stargazersCount ?? 0, () {
-                            Navigator.of(context).pushNamed(
-                                Pages.User.toString(), arguments: {
+                          _createCountButton("星标", _repo?.stargazersCount ?? 0,
+                              () {
+                            Navigator.of(context)
+                                .pushNamed(Pages.User.toString(), arguments: {
                               "type": Users.Stargazer,
                               "slug": _repoSlug
                             });
@@ -354,8 +382,8 @@ class _RepoDetailPageState extends State<RepoDetailPage>
                               "仓库分支", _repo?.forksCount ?? 0, () {}),
                           _createCountButton(
                               "关注者", _repo?.subscribersCount ?? 0, () {
-                            Navigator.of(context).pushNamed(
-                                Pages.User.toString(), arguments: {
+                            Navigator.of(context)
+                                .pushNamed(Pages.User.toString(), arguments: {
                               "type": Users.Watcher,
                               "slug": _repoSlug
                             });
@@ -367,13 +395,13 @@ class _RepoDetailPageState extends State<RepoDetailPage>
             ),
             Expanded(
                 child: Card(
-                  child: Markdown(
-                    data: _readme ?? "",
-                    onTapLink: (href) {
-                      _handleTabLink(href);
-                    },
-                  ),
-                ))
+              child: Markdown(
+                data: _readme ?? "",
+                onTapLink: (href) {
+                  _handleTabLink(href);
+                },
+              ),
+            ))
           ],
         ),
         IndicatorContainer(
