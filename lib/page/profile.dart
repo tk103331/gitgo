@@ -141,7 +141,6 @@ class _ProfilePageState extends State<ProfilePage>
         body: TabBarView(controller: _tabController, children: <Widget>[
           Container(
             child: Container(
-                padding: EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -170,6 +169,7 @@ class _ProfilePageState extends State<ProfilePage>
                     ),
                     Card(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
                           Container(
                             child: Text(
