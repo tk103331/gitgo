@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gitgo/common/emums.dart';
 import 'package:gitgo/model/bookmark.dart';
+import 'package:gitgo/widget/tabbar.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
@@ -122,16 +123,16 @@ class _ProfilePageState extends State<ProfilePage>
               },
             )
           ],
-          bottom: TabBar(
+          bottom: SizedTabBar(
             controller: _tabController,
             tabs: <Widget>[
-              Tab(
+              SizedTab(
                 child: Text("信息"),
               ),
-              Tab(
+              SizedTab(
                 child: Text("活动"),
               ),
-              Tab(
+              SizedTab(
                 child: Text("星标"),
               ),
             ],
@@ -142,81 +143,79 @@ class _ProfilePageState extends State<ProfilePage>
           Container(
             child: Container(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Card(
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Image.network(
-                              _user?.avatarUrl ?? "",
-                              width: 64,
-                            ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(_user?.login ?? ""),
-                                  Text(_user?.location ?? ""),
-                                  Text(_user?.createdAt?.toString() ?? "")
-                                ],
-                              ))
-                        ],
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Card(
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Image.network(
+                          _user?.avatarUrl ?? "",
+                          width: 64,
+                        ),
                       ),
-                    ),
-                    Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              _user?.name ?? "",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              _createCountButton(
-                                  "跟随者", _user?.followersCount ?? 0, () {
-                                Navigator.of(context).pushNamed(
-                                    Pages.User.toString(),
-                                    arguments: {
-                                      "type": Users.Follower,
-                                      "user": _user.login
-                                    });
-                              }),
-                              _createCountButton(
-                                  "跟随", _user?.followingCount ?? 0, () {
-                                Navigator.of(context).pushNamed(
-                                    Pages.User.toString(),
-                                    arguments: {
-                                      "type": Users.Following,
-                                      "user": _user.login
-                                    });
-                              }),
-                              _createCountButton(
-                                  "公开仓库", _user?.publicReposCount ?? 0, () {
-                                Navigator.of(context).pushReplacementNamed(
-                                    Pages.UserRepo.toString(),
-                                    arguments: {"user": _user.login});
-                              }),
-                              _createCountButton("公开Gist",
-                                  _user?.publicGistsCount ?? 0, () {}),
+                              Text(_user?.login ?? ""),
+                              Text(_user?.location ?? ""),
+                              Text(_user?.createdAt?.toString() ?? "")
                             ],
-                          )
-                        ],
+                          ))
+                    ],
+                  ),
+                ),
+                Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          _user?.name ?? "",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
                       ),
-                    )
-                  ],
-                )),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          _createCountButton("跟随者", _user?.followersCount ?? 0,
+                              () {
+                            Navigator.of(context)
+                                .pushNamed(Pages.User.toString(), arguments: {
+                              "type": Users.Follower,
+                              "user": _user.login
+                            });
+                          }),
+                          _createCountButton("跟随", _user?.followingCount ?? 0,
+                              () {
+                            Navigator.of(context)
+                                .pushNamed(Pages.User.toString(), arguments: {
+                              "type": Users.Following,
+                              "user": _user.login
+                            });
+                          }),
+                          _createCountButton(
+                              "公开仓库", _user?.publicReposCount ?? 0, () {
+                            Navigator.of(context).pushReplacementNamed(
+                                Pages.UserRepo.toString(),
+                                arguments: {"user": _user.login});
+                          }),
+                          _createCountButton(
+                              "公开Gist", _user?.publicGistsCount ?? 0, () {}),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )),
           ),
           IndicatorContainer(
             showChild: _eventLoaded,

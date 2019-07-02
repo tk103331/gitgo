@@ -3,6 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gitgo/api/service.dart';
 import 'package:gitgo/common/config.dart';
 import 'package:gitgo/model/bookmark.dart';
+import 'package:gitgo/widget/tabbar.dart';
 import 'package:github/server.dart' as github;
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
@@ -174,35 +175,38 @@ class _RepoDetailPageState extends State<RepoDetailPage>
     var commit = _commits[index];
     return Card(
       child: ListTile(
-          leading: Image.network(commit?.committer?.avatarUrl??""),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(commit?.committer?.login ?? ""),
-              Text(commit?.commit?.author?.date?.toString() ?? "")
-            ],
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(commit?.commit?.message ?? "", softWrap: true,),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(commit?.sha?.substring(0, 7) ?? ""),
-                  ),
-                  Icon(
-                    Icons.comment,
-                    size: 14,
-                  ),
-                  Text((commit?.commit?.commentCount ?? 0).toString())
-                ],
-              )
-            ],
-          ),
-          onTap: () {
-            Navigator.of(context).pushNamed(Pages.CommitDetail.toString());
-          },
+        leading: Image.network(commit?.committer?.avatarUrl ?? ""),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(commit?.committer?.login ?? ""),
+            Text(commit?.commit?.author?.date?.toString() ?? "")
+          ],
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              commit?.commit?.message ?? "",
+              softWrap: true,
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(commit?.sha?.substring(0, 7) ?? ""),
+                ),
+                Icon(
+                  Icons.comment,
+                  size: 14,
+                ),
+                Text((commit?.commit?.commentCount ?? 0).toString())
+              ],
+            )
+          ],
+        ),
+        onTap: () {
+          Navigator.of(context).pushNamed(Pages.CommitDetail.toString());
+        },
       ),
     );
   }
@@ -321,17 +325,17 @@ class _RepoDetailPageState extends State<RepoDetailPage>
             },
           )
         ],
-        bottom: TabBar(controller: _tabController, tabs: [
-          Tab(
+        bottom: SizedTabBar(controller: _tabController, tabs: [
+          SizedTab(
             child: Text("信息"),
           ),
-          Tab(
+          SizedTab(
             child: Text("文件"),
           ),
-          Tab(
+          SizedTab(
             child: Text("提交"),
           ),
-          Tab(
+          SizedTab(
             child: Text("活动"),
           ),
         ]),

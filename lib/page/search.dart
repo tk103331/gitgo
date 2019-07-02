@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gitgo/common/emums.dart';
+import 'package:gitgo/widget/tabbar.dart';
 import 'package:github/server.dart';
 
 import '../api/base.dart';
@@ -113,13 +114,16 @@ class _SearchPageState extends State<SearchPage>
           },
         ),
         actions: _createActions(),
-        bottom: TabBar(
+        bottom: SizedTabBar(
+          size: Size.fromHeight(32),
           controller: _tabController,
           tabs: <Widget>[
-            Tab(
+            SizedTab(
+              size: Size.fromHeight(32),
               text: "仓库",
             ),
-            Tab(
+            SizedTab(
+              size: Size.fromHeight(32),
               text: "用户",
             ),
           ],
