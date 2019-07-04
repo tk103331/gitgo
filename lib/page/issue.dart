@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gitgo/common/emums.dart';
+import 'package:gitgo/widget/tabbar.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/service.dart';
@@ -11,27 +12,42 @@ class IssuePage extends StatefulWidget {
   _IssuePageState createState() => _IssuePageState();
 }
 
-class _IssuePageState extends State<IssuePage> {
-  List<github.Issue> _issues = new List();
-  bool _loaded = false;
+class _IssuePageState extends State<IssuePage>
+    with SingleTickerProviderStateMixin {
+  List<github.Issue> _openedIssues = new List();
+  List<github.Issue> _closedIssues = new List();
+  bool _openedLoaded = false;
+  bool _closedLoaded = false;
+  TabController _tabController;
+
+  _IssuePageState() {
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _loadOpenedIssues();
+    _loadClosedIssues();
   }
 
-  _loadData() async {
-    var list = await listUserOpenedIssues(currentUser.login);
-
+  _loadOpenedIssues() async {
+    var list = await listOpenedIssues().toList();
     setState(() {
-      _issues.addAll(list.items);
-      _loaded = true;
+      _openedIssues.addAll(list);
+      _openedLoaded = true;
     });
   }
 
-  Widget _createItem(BuildContext context, int index) {
-    var issue = _issues[index];
+  _loadClosedIssues() async {
+    var list = await listClosedIssues().toList();
+    setState(() {
+      _closedIssues.addAll(list);
+      _closedLoaded = true;
+    });
+  }
+
+  Widget _createItem(github.Issue issue) {
     return Card(
         child: ListTile(
       leading: Image.network(issue?.user?.avatarUrl ?? ""),
@@ -52,12 +68,32 @@ class _IssuePageState extends State<IssuePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text("问题"),
+          bottom: SizedTabBar(controller: _tabController, tabs: <Widget>[
+            SizedTab(
+              child: Text("开放的"),
+            ),
+            SizedTab(
+              child: Text("关闭的"),
+            ),
+          ]),
         ),
         drawer: MainDrawer,
-        body: IndicatorContainer(
-          showChild: _loaded,
-          child: ListView.builder(
-              itemCount: _issues.length, itemBuilder: _createItem),
-        ));
+        body: TabBarView(controller: _tabController, children: [
+          IndicatorContainer(
+              showChild: _openedLoaded,
+              child: ListView.builder(
+                  itemCount: _openedIssues.length,
+                  itemBuilder: (context, i) {
+                    return _createItem(_openedIssues[i]);
+                  })),
+          IndicatorContainer(
+            showChild: _closedLoaded,
+            child: ListView.builder(
+                itemCount: _closedIssues.length,
+                itemBuilder: (context, i) {
+                  return _createItem(_closedIssues[i]);
+                }),
+          )
+        ]));
   }
 }

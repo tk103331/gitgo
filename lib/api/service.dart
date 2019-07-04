@@ -31,15 +31,39 @@ Future<IssueResult> searchIssues(String query) {
   params['q'] = query;
   Map<String, String> headers = Map();
   headers['Accept'] = 'application/vnd.github.symmetra-preview+json';
-  return defaultClient.getJSON("/search/issues", convert: IssueResult.fromJson, params: params, headers: headers);
+  return defaultClient.getJSON("/search/issues",
+      convert: IssueResult.fromJson, params: params, headers: headers);
 }
 
 Future<IssueResult> listUserOpenedIssues(String user) {
   return searchIssues("author:$user");
 }
 
+Stream<Issue> _listIssues(Map<String, String> params) {
+  Map<String, String> headers = Map();
+  headers['Accept'] = 'application/vnd.github.machine-man-preview';
+  return new PaginationHelper(defaultClient).objects(
+      "GET", "/user/issues", Issue.fromJSON,
+      params: params, headers: headers);
+}
+
+Stream<Issue> listOpenedIssues() {
+  Map<String, String> params = Map();
+  params["filter"] = "all";
+  params["state"] = "open";
+  return _listIssues(params);
+}
+
+Stream<Issue> listClosedIssues() {
+  Map<String, String> params = Map();
+  params["filter"] = "all";
+  params["state"] = "closed";
+  return _listIssues(params);
+}
+
 Stream<User> listUserFollowing(String user) {
-  return PaginationHelper(defaultClient).objects("GET", "/users/$user/following", User.fromJson);
+  return PaginationHelper(defaultClient)
+      .objects("GET", "/users/$user/following", User.fromJson);
 }
 
 /// Lists the commits of the provided repository [slug].

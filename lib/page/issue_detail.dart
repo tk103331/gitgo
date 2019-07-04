@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/api/base.dart';
 import 'package:gitgo/common/emums.dart';
 import 'package:github/server.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -19,6 +20,9 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
     });
     super.didChangeDependencies();
   }
+  
+  void _loadData() {
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +37,14 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(left: 16, right: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Image.network(
                         _issue?.user?.avatarUrl,
-                        height: 64,
-                        width: 64,
+                        height: 32,
+                        width: 32,
                       ),
                       FlatButton(
                         child: Text(
@@ -54,19 +58,21 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
                               arguments: _issue?.user?.login ?? "");
                         },
                       ),
+
                       Text(_issue.createdAt.toString())
                     ],
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(left: 16, right: 16),
                   child: Text(
                     _issue?.title ?? "",
                     softWrap: true,
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
                 ),
                 Container(
-                    height: 500,
+                    height: 300,
                     child: Markdown(
                       data: _issue?.body ?? "",
                     ))
