@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/common/emums.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/service.dart';
@@ -35,11 +36,14 @@ class _IssuePageState extends State<IssuePage> {
         child: ListTile(
       leading: Image.network(issue?.user?.avatarUrl ?? ""),
       title: Text(issue?.title),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-            Text(issue?.createdAt?.toString()??"")
-          ],),
+      subtitle: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[Text(issue?.createdAt?.toString() ?? "")],
+      ),
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed(Pages.IssueDetail.toString(), arguments: issue);
+      },
     ));
   }
 

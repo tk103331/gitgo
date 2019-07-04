@@ -17,7 +17,8 @@ enum Pages {
   TopicRepo,
   Setting,
   User,
-  CommitDetail
+  CommitDetail,
+  IssueDetail,
 }
 
 enum Repos { Mine, Starred, Topic, User}

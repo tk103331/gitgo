@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:gitgo/page/commit_detail.dart';
 
 import './emums.dart';
 import '../page/activity.dart';
 import '../page/bookmark.dart';
 import '../page/code.dart';
+import '../page/commit_detail.dart';
 import '../page/issue.dart';
+import '../page/issue_detail.dart';
 import '../page/notification.dart';
 import '../page/profile.dart';
 import '../page/repo_detail.dart';
@@ -33,6 +34,7 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.Setting.toString(): (context) => SettingPage(),
   Pages.User.toString(): (context) => UserPage(),
   Pages.CommitDetail.toString(): (context) => CommitDetailPage(),
+  Pages.IssueDetail.toString(): (context) => IssueDetailPage(),
 };
 
 void routeToFirstPage(BuildContext context) {
