@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
 import '../common/config.dart';
 import '../common/emums.dart';
-import '../widget/activity_item.dart';
 import '../widget/indicator.dart';
 import '../widget/repo_item.dart';
 
@@ -24,6 +22,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
   String _title = "我的仓库";
   bool _loaded = false;
   String _topic = "";
+  String _user = "";
 
   _RepositoryPageState(this._repos);
 
@@ -39,12 +38,29 @@ class _RepositoryPageState extends State<RepositoryPage> {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     if (params != null) {
       _topic = params['topic'] as String;
+      _user = params['user'] as String;
     }
     _loadData();
   }
 
   _loadData() async {
     switch (_repos) {
+      case Repos.User:
+        if (mounted) {
+          setState(() {
+            _title = _user + " - 公告仓库";
+          });
+        }
+        var list = await defaultClient.repositories
+            .listUserRepositories(_user)
+            .toList();
+        if (mounted) {
+          setState(() {
+            _repositories.addAll(list);
+            _loaded = true;
+          });
+        }
+        break;
       case Repos.Mine:
         if (mounted) {
           setState(() {
@@ -114,247 +130,5 @@ class _RepositoryPageState extends State<RepositoryPage> {
           child: ListView.builder(
               itemCount: _repositories.length, itemBuilder: _createItem),
         ));
-  }
-}
-
-class RepoDetailPage extends StatefulWidget {
-  @override
-  _RepoDetailPageState createState() => _RepoDetailPageState();
-}
-
-class _RepoDetailPageState extends State<RepoDetailPage>
-    with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  github.Repository _repo;
-  List<github.GitHubFile> _files = List();
-  List<github.Event> _events = List();
-  List<github.RepositoryCommit> _commits = List();
-  String _readme;
-  String _path = "";
-  bool _fileLoaded = false;
-  bool _eventLoaded = false;
-  bool _commitLoaded = false;
-  bool _isStarred = false;
-
-  _RepoDetailPageState() {
-    _tabController = TabController(length: 4, vsync: this);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _repo = ModalRoute.of(context).settings.arguments as github.Repository;
-    _getReadme();
-    _listFiles();
-    _listEvents();
-    _listCommits();
-    _loadIsStarred();
-  }
-
-  void _loadIsStarred() async {
-    var isStarred = await defaultClient.activity.isStarred(_repo.slug());
-    if (mounted) {
-      setState(() {
-        _isStarred = isStarred;
-      });
-    }
-  }
-
-  void _getReadme() async {
-    try {
-      var file = await defaultClient.repositories.getReadme(_repo.slug());
-      var str = file.text;
-      if (mounted) {
-        setState(() {
-          _readme = str;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void _listFiles() async {
-    if (mounted) {
-      setState(() {
-        _fileLoaded = false;
-        _files.clear();
-      });
-    }
-    try {
-      var contents =
-          await defaultClient.repositories.getContents(_repo.slug(), _path);
-
-      if (contents.isFile) {
-        _files.add(contents.file);
-      } else if (contents.isDirectory) {
-        _files.addAll(contents.tree);
-      }
-      if (_files.length > 0) {
-        var parent = github.GitHubFile()
-          ..name = ".."
-          ..type = "dir";
-        _files.insert(0, parent);
-      }
-      if (mounted) {
-        setState(() {
-          _fileLoaded = true;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void _listCommits() async {
-    try {
-      var commits =
-          await defaultClient.repositories.listCommits(_repo.slug()).toList();
-      _commits.addAll(commits);
-      if (mounted) {
-        setState(() {
-          _commitLoaded = true;
-        });
-      }
-    } catch (e) {}
-  }
-
-  void _listEvents() async {
-    try {
-      var events = await defaultClient.activity
-          .listRepositoryEvents(_repo.slug())
-          .toList();
-      _events.addAll(events);
-      if (mounted) {
-        setState(() {
-          _eventLoaded = true;
-        });
-      }
-    } catch (e) {}
-  }
-
-  Widget _createFileItem(BuildContext context, int index) {
-    var file = _files[index];
-    file.sourceRepository = _repo.slug();
-    return ListTile(
-      title: Row(
-        children: <Widget>[
-          file.type == "dir"
-              ? Icon(Icons.folder)
-              : Icon(Icons.insert_drive_file),
-          Text(file.name)
-        ],
-      ),
-      onTap: () {
-        if (file.type == "dir") {
-          if (file.name == "..") {
-            _path = _path.contains("/")
-                ? _path.substring(0, _path.lastIndexOf("/"))
-                : "";
-          } else {
-            _path += "/" + file.name;
-          }
-          _listFiles();
-        } else {
-          Navigator.of(context)
-              .pushNamed(Pages.CodeView.toString(), arguments: file);
-        }
-      },
-    );
-  }
-
-  Widget _createCommitItem(BuildContext context, int index) {
-    var commit = _commits[index];
-    return ListTile(
-        leading: Image.network(commit.committer.avatarUrl),
-        title: Text(commit.committer.login),
-        subtitle: Text(commit.commit.message));
-  }
-
-  Widget _createActivityItem(BuildContext context, int index) {
-    var event = _events[0];
-    return ActivityListItem(event);
-  }
-
-  void _handleClickStar() async {
-    if (_isStarred) {
-      await defaultClient.activity.unstar(_repo.slug());
-    } else {
-      await defaultClient.activity.star(_repo.slug());
-    }
-    _loadIsStarred();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_repo.name),
-        actions: <Widget>[
-          FlatButton(
-            clipBehavior: Clip.hardEdge,
-            child: Icon(
-              _isStarred ? Icons.star : Icons.star_border,
-              color: Colors.white70,
-            ),
-            onPressed: _handleClickStar,
-          ),
-        ],
-        bottom: TabBar(controller: _tabController, tabs: [
-          Tab(
-            child: Text("信息"),
-          ),
-          Tab(
-            child: Text("文件"),
-          ),
-          Tab(
-            child: Text("提交"),
-          ),
-          Tab(
-            child: Text("活动"),
-          ),
-        ]),
-      ),
-      body: TabBarView(controller: _tabController, children: <Widget>[
-        Column(
-          children: <Widget>[
-            Container(
-                height: 30,
-                child: Text(
-                  "README",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                )),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 167,
-              child: Markdown(
-                data: _readme ?? "",
-              ),
-            )
-          ],
-        ),
-        IndicatorContainer(
-          showChild: _fileLoaded,
-          child: ListView.builder(
-            itemCount: _files.length,
-            itemBuilder: _createFileItem,
-          ),
-        ),
-        IndicatorContainer(
-          showChild: _commitLoaded,
-          child: ListView.builder(
-            itemCount: _commits.length,
-            itemBuilder: _createCommitItem,
-          ),
-        ),
-        IndicatorContainer(
-          showChild: _eventLoaded,
-          child: ListView.builder(
-            itemCount: _events.length,
-            itemBuilder: _createActivityItem,
-          ),
-        )
-      ]),
-    );
   }
 }

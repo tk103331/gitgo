@@ -7,18 +7,24 @@ enum Pages {
   Issue,
   Notification,
   MineRepo,
+  UserRepo,
   StarredRepo,
   Bookmark,
   Search,
-  Trace,
-  TrendingRepo,
-  RepoCollection,
   Topic,
-  GlobalActivity,
   RepoDetail,
   CodeView,
   TopicRepo,
   Setting,
+  User,
+  CommitDetail,
+  IssueDetail,
 }
 
-enum Repos { Mine, Starred, Topic }
+enum Repos { Mine, Starred, Topic, User}
+
+enum Users { Follower, Following, Stargazer, Watcher}
+
+enum FirstPage {Profile, Activity, Issue, Notification, MineRepo, StarredRepo, Bookmark, Topic}
+
+enum BookmarkType {User, Repository}

@@ -33,6 +33,8 @@ class _HomePageState extends State<HomePage> {
         return IssuePage();
       case Pages.Notification:
         return NotificationPage();
+      case Pages.UserRepo:
+        return RepositoryPage(Repos.User);
       case Pages.MineRepo:
         return RepositoryPage(Repos.Mine);
       case Pages.StarredRepo:

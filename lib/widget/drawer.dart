@@ -20,12 +20,12 @@ class NavDrawer extends StatelessWidget {
           title: Text("个人主页"),
           onTap: () {
             Navigator.of(context).pushReplacementNamed(Pages.Profile.toString(),
-                arguments: currentUser);
+                arguments: currentUser.login);
           },
         ),
         ListTile(
           leading: Icon(Icons.camera),
-          title: Text("动态"),
+          title: Text("活动"),
           onTap: () {
             Navigator.of(context)
                 .pushReplacementNamed(Pages.Activity.toString());
@@ -49,7 +49,7 @@ class NavDrawer extends StatelessWidget {
         Divider(),
         ListTile(
           leading: Icon(Icons.book),
-          title: Text("我的版本库"),
+          title: Text("我的仓库"),
           onTap: () {
             Navigator.of(context)
                 .pushReplacementNamed(Pages.MineRepo.toString());
@@ -57,7 +57,7 @@ class NavDrawer extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(Icons.star),
-          title: Text("星标版本库"),
+          title: Text("星标仓库"),
           onTap: () {
             Navigator.of(context)
                 .pushReplacementNamed(Pages.StarredRepo.toString());

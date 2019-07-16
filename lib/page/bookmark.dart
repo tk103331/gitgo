@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:github/server.dart';
 
+import '../api/base.dart';
 import '../common/config.dart';
+import '../common/emums.dart';
+import '../model/bookmark.dart';
 
 class BookmarkPage extends StatefulWidget {
   @override
@@ -8,6 +12,68 @@ class BookmarkPage extends StatefulWidget {
 }
 
 class _BookmarkPageState extends State<BookmarkPage> {
+  List<Bookmark> _bookmarks = new List();
+
+  @override
+  void initState() {
+    _loadData();
+    super.initState();
+  }
+
+  void _loadData() async {
+    loadBookmarks();
+    setState(() {
+      _bookmarks.addAll(bookmarks);
+    });
+  }
+
+  void _routeTo(Bookmark bookmark) async {
+    switch (bookmark.type) {
+      case BookmarkType.User:
+        var user = await defaultClient.users.getUser(bookmark.user);
+        Navigator.of(context)
+            .pushNamed(Pages.Profile.toString(), arguments: user);
+        break;
+      case BookmarkType.Repository:
+        var slug = RepositorySlug.full(bookmark.repo);
+        Navigator.of(context)
+            .pushNamed(Pages.RepoDetail.toString(), arguments: slug);
+        break;
+    }
+  }
+
+  Widget _createItem(BuildContext context, int index) {
+    var bookmark = _bookmarks[index];
+    IconData iconData;
+    String title;
+    switch (bookmark.type) {
+      case BookmarkType.Repository:
+        iconData = Icons.book;
+        title = bookmark.repo;
+        break;
+      case BookmarkType.User:
+        iconData = Icons.account_box;
+        title = bookmark.user;
+        break;
+    }
+    return Dismissible(
+        key: Key(bookmark.toJson()),
+        onDismissed: (direction) {
+          _bookmarks.removeAt(index);
+          delBookmark(bookmark);
+          _loadData();
+        },
+        child: Card(
+          child: ListTile(
+            leading: Icon(iconData),
+            title: Text(title),
+            onTap: () {
+              _routeTo(bookmark);
+            },
+          ),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,10 +81,9 @@ class _BookmarkPageState extends State<BookmarkPage> {
         title: Text("书签"),
       ),
       drawer: MainDrawer,
-      body: Container(
-        child: Center(
-          child: Text("书签"),
-        ),
+      body: ListView.builder(
+        itemCount: _bookmarks.length,
+        itemBuilder: _createItem,
       ),
     );
   }
