@@ -21,15 +21,15 @@ void loadSharedPreferences() async {
   var themeColor = sharedPreferences.getString("themeColor");
   var firstPage = sharedPreferences.getString("firstPage");
 
-  if(themeColor != null) {
-    themeColors.forEach((color, name){
-      if(color.toString() == themeColor) {
+  if (themeColor != null) {
+    themeColors.forEach((color, name) {
+      if (color.toString() == themeColor) {
         settingModel.themeColor = color;
       }
     });
   }
 
-  if(firstPage != null) {
+  if (firstPage != null) {
     firstPages.forEach((page, name) {
       if (page.toString() == firstPage) {
         settingModel.firstPage = page;
@@ -42,25 +42,28 @@ void loadSharedPreferences() async {
 
 void _removeBookmark(Bookmark bookmark) {
   bookmarks.removeWhere((item) {
-    return bookmark == item || (
-        item.type == bookmark.type
-            && item.user == bookmark.user
-            && item.repo == bookmark.repo
-    );
+    return bookmark == item ||
+        (item.type == bookmark.type &&
+            item.user == bookmark.user &&
+            item.repo == bookmark.repo);
   });
 }
 
 void loadBookmarks() {
   String bookmarkJson = sharedPreferences.getString("bookmarks");
-  var list = jsonDecode(bookmarkJson) as List;
-  list.forEach((item) {
-    var input = jsonDecode(item) as Map<String, dynamic>;
-    var bookmark = Bookmark.fromJson(input);
-    if (bookmark != null) {
-      _removeBookmark(bookmark);
-      bookmarks.add(bookmark);
-    }
-  });
+  if (bookmarkJson != null) {
+    try {
+      var list = jsonDecode(bookmarkJson) as List;
+      list.forEach((item) {
+        var input = jsonDecode(item) as Map<String, dynamic>;
+        var bookmark = Bookmark.fromJson(input);
+        if (bookmark != null) {
+          _removeBookmark(bookmark);
+          bookmarks.add(bookmark);
+        }
+      });
+    } catch (e) {}
+  }
 }
 
 void addBookmark(Bookmark bookmark) {
@@ -95,7 +98,6 @@ class SettingModel extends Model {
   get firstPage {
     return _firstPage;
   }
-
 }
 
 final Map<Color, String> themeColors = <Color, String>{

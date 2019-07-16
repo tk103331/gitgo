@@ -20,9 +20,8 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
     });
     super.didChangeDependencies();
   }
-  
-  void _loadData() {
-  }
+
+  void _loadData() {}
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +57,6 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
                               arguments: _issue?.user?.login ?? "");
                         },
                       ),
-
                       Text(_issue.createdAt.toString())
                     ],
                   ),

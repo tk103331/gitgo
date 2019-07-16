@@ -46,7 +46,7 @@ void routeToFirstPage(BuildContext context) {
       break;
     case FirstPage.Profile:
       Navigator.of(context).pushReplacementNamed(Pages.Profile.toString(),
-          arguments: currentUser);
+          arguments: currentUser.login);
       break;
     case FirstPage.Notification:
       Navigator.of(context).pushReplacementNamed(Pages.Notification.toString());

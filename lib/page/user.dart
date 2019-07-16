@@ -72,11 +72,13 @@ class _UserPageState extends State<UserPage> {
         list = await defaultClient.activity.listWatchers(_repoSlug).toList();
         break;
     }
-    setState(() {
-      _users.clear();
-      _users.addAll(list);
-      _loaded = true;
-    });
+    if (mounted) {
+      setState(() {
+        _users.clear();
+        _users.addAll(list);
+        _loaded = true;
+      });
+    }
   }
 
   Widget _createUserItem(BuildContext context, int index) {

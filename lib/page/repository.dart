@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitgo/widget/appbar.dart';
 import 'package:github/server.dart' as github;
 
 import '../api/base.dart';
@@ -19,7 +20,7 @@ class RepositoryPage extends StatefulWidget {
 class _RepositoryPageState extends State<RepositoryPage> {
   List<github.Repository> _repositories = new List();
   Repos _repos = Repos.Mine;
-  String _title = "我的仓库";
+  Widget _title = Text("我的仓库");
   bool _loaded = false;
   String _topic = "";
   String _user = "";
@@ -48,7 +49,10 @@ class _RepositoryPageState extends State<RepositoryPage> {
       case Repos.User:
         if (mounted) {
           setState(() {
-            _title = _user + " - 公告仓库";
+            _title = AppBarTitle(
+              title: "公共仓库",
+              subtitle: _user ?? "",
+            );
           });
         }
         var list = await defaultClient.repositories
@@ -64,7 +68,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
       case Repos.Mine:
         if (mounted) {
           setState(() {
-            _title = "我的仓库";
+            _title = Text("我的仓库");
           });
         }
         var list = await defaultClient.repositories
@@ -80,7 +84,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
       case Repos.Starred:
         if (mounted) {
           setState(() {
-            _title = "星标仓库";
+            _title = Text("星标仓库");
           });
         }
         // var list =
@@ -92,14 +96,14 @@ class _RepositoryPageState extends State<RepositoryPage> {
           setState(() {
             _repositories.addAll(list);
             _loaded = true;
-            _title = "星标仓库";
+            _title = Text("星标仓库");
           });
         }
         break;
       case Repos.Topic:
         if (mounted) {
           setState(() {
-            _title = "主题 " + _topic;
+            _title = Text("主题 " + _topic);
           });
         }
         var list =
@@ -107,7 +111,6 @@ class _RepositoryPageState extends State<RepositoryPage> {
         setState(() {
           _repositories.addAll(list);
           _loaded = true;
-          _title = "主题 " + _topic;
         });
         break;
     }
