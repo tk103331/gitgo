@@ -46,6 +46,13 @@ class NavDrawer extends StatelessWidget {
             Navigator.of(context).pushReplacementNamed(Pages.Issue.toString());
           },
         ),
+        ListTile(
+          leading: Icon(Icons.import_contacts),
+          title: Text("Gist"),
+          onTap: () {
+            Navigator.of(context).pushReplacementNamed(Pages.MineGist.toString());
+          },
+        ),
         Divider(),
         ListTile(
           leading: Icon(Icons.book),

@@ -208,7 +208,11 @@ class _ProfilePageState extends State<ProfilePage>
                                 arguments: {"user": _user.login});
                           }),
                           _createCountButton(
-                              "公开Gist", _user?.publicGistsCount ?? 0, () {}),
+                              "公开Gist", _user?.publicGistsCount ?? 0, () {
+                            Navigator.of(context).pushReplacementNamed(
+                                Pages.MineGist.toString(),
+                                arguments: _user.login);
+                          }),
                         ],
                       )
                     ],
