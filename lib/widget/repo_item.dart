@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:github/server.dart';
-
+import 'package:github/src/const/language_color.dart';
 import '../common/emums.dart';
 
 class RepoListItem extends StatelessWidget {
   final Repository _repo;
 
   RepoListItem(this._repo);
+
+  Color _langColor(String lang) {
+    var colorStr = languagesColor[lang];
+    if (colorStr != null) {
+      var r = colorStr.substring(1, 3);
+      var g = colorStr.substring(3, 5);
+      var b = colorStr.substring(5, 7);
+      return Color.fromARGB(255, int.parse(r, radix: 16), int.parse(g, radix: 16),
+          int.parse(b, radix: 16));
+    }
+    return Colors.black;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +29,13 @@ class RepoListItem extends StatelessWidget {
       ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[Text(_repo.name), Text(_repo.language ?? "")],
+        children: <Widget>[
+          Text(_repo.name),
+          Text(
+            _repo.language ?? "",
+            style: TextStyle(color: _langColor(_repo.language ?? "")),
+          )
+        ],
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
