@@ -21,6 +21,7 @@ enum Pages {
   IssueDetail,
   MineGist,
   UserGist,
+  GistDetail,
 }
 
 enum Repos { Mine, Starred, Topic, User}

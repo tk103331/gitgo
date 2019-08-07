@@ -52,6 +52,9 @@ class _GistPageState extends State<GistPage> {
     return Card(
       child: ListTile(
         title: Text(gist.description),
+        onTap: () {
+          Navigator.of(context).pushNamed(Pages.GistDetail.toString(), arguments: gist);
+        },
       ),
     );
   }

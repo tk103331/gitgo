@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:gitgo/page/gist.dart';
+import 'package:gitgo/page/gist_detail.dart';
 
 import './emums.dart';
 import '../page/activity.dart';
@@ -38,6 +39,7 @@ Map<String, WidgetBuilder> mainRoutes = <String, WidgetBuilder>{
   Pages.IssueDetail.toString(): (context) => IssueDetailPage(),
   Pages.MineGist.toString(): (context) => GistPage(Gists.Mine),
   Pages.UserGist.toString(): (context) => GistPage(Gists.User),
+  Pages.GistDetail.toString(): (context) => GistDetailPage(),
 };
 
 void routeToFirstPage(BuildContext context) {
