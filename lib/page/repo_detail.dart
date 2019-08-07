@@ -3,6 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gitgo/api/service.dart';
 import 'package:gitgo/common/config.dart';
 import 'package:gitgo/model/bookmark.dart';
+import 'package:gitgo/model/code.dart';
 import 'package:gitgo/widget/tabbar.dart';
 import 'package:github/server.dart' as github;
 import 'package:oktoast/oktoast.dart';
@@ -164,8 +165,15 @@ class _RepoDetailPageState extends State<RepoDetailPage>
           }
           _listFiles();
         } else {
-          Navigator.of(context)
-              .pushNamed(Pages.CodeView.toString(), arguments: file);
+          defaultClient.repositories
+              .getContents(file.sourceRepository, file.path)
+              .then((contents) {
+            if (contents.isFile && contents.file != null) {
+              Navigator.of(context).pushNamed(Pages.CodeView.toString(),
+                  arguments: CodeFile(contents.file.name, contents.file.type,
+                      contents.file.text));
+            }
+          });
         }
       },
     );

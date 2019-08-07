@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gitgo/api/base.dart';
 import 'package:gitgo/common/emums.dart';
+import 'package:gitgo/model/code.dart';
 import 'package:gitgo/widget/indicator.dart';
 import 'package:github/server.dart';
 
@@ -36,8 +37,8 @@ class _GistDetailPageState extends State<GistDetailPage> {
         child: ListTile(
       title: Text(file.name),
       onTap: () {
-        Navigator.of(context)
-            .pushNamed(Pages.CodeView.toString(), arguments: file);
+        Navigator.of(context).pushNamed(Pages.CodeView.toString(),
+            arguments: CodeFile(file.name, file.language, file.content));
       },
     ));
   }

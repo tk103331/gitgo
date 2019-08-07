@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
-import 'package:github/server.dart';
-
-import '../api/base.dart';
+import 'package:gitgo/model/code.dart';
 
 class CodeViewPage extends StatefulWidget {
   @override
@@ -10,7 +8,7 @@ class CodeViewPage extends StatefulWidget {
 }
 
 class _CodeViewPageState extends State<CodeViewPage> {
-  GitHubFile _file;
+  CodeFile _file;
   String _name = "";
   String _text = "";
   Syntax _syntax = Syntax.DART;
@@ -19,7 +17,7 @@ class _CodeViewPageState extends State<CodeViewPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _file = ModalRoute.of(context).settings.arguments as GitHubFile;
+    _file = ModalRoute.of(context).settings.arguments as CodeFile;
     _getFileContent();
     setState(() {
       _name = _file.name;
@@ -28,14 +26,10 @@ class _CodeViewPageState extends State<CodeViewPage> {
 
   void _getFileContent() async {
     if (_file != null) {
-      var contents = await defaultClient.repositories
-          .getContents(_file.sourceRepository, _file.path);
-      if (contents.isFile) {
-        setState(() {
-          _text = contents.file.text;
-          _syntax = mappingSyntax(contents.file.type);
-        });
-      }
+      setState(() {
+        _text = _file.content;
+        _syntax = mappingSyntax(_file.type);
+      });
     }
   }
 
