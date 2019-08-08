@@ -46,6 +46,28 @@ class ActivityListItem extends StatelessWidget {
     }
   }
 
+  Widget _eventIcon(String eventType) {
+    switch (eventType) {
+      case "CreateEvent":
+        return Icon(
+          Icons.add_circle,
+          size: 16,
+        );
+      case "WatchEvent":
+        return Icon(Icons.star, size: 16);
+      case "ForkEvent":
+        return Icon(Icons.call_split, size: 16);
+      case "IssuesEvent":
+        return Icon(Icons.help, size: 16);
+      case "IssueCommentEvent":
+        return Icon(Icons.comment, size: 16);
+      case "PullRequestEvent":
+        return Icon(Icons.settings_ethernet, size: 16);
+      default:
+        return Text(eventType);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -61,8 +83,11 @@ class ActivityListItem extends StatelessWidget {
       ),
       subtitle: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(_event?.type ?? ""), Text(_event?.repo?.name ?? "")],
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _eventIcon(_event?.type ?? ""),
+          Text(_event?.repo?.name ?? "")
+        ],
       ),
       onLongPress: () {
         _showPopupMenu(context);

@@ -355,6 +355,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
               child: Container(
                   padding: EdgeInsets.all(15),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Row(
                         children: <Widget>[
@@ -374,10 +375,14 @@ class _RepoDetailPageState extends State<RepoDetailPage>
                           Text(_repo?.name ?? "")
                         ],
                       ),
-                      Text(
-                        _repo?.description ?? "",
-                        textAlign: TextAlign.start,
+                      Container(padding: EdgeInsets.only(top: 10,bottom: 10),
+                        child: Text(
+                          _repo?.description ?? "",
+                          style: TextStyle(color: Colors.grey),
+
+                        ),
                       ),
+
                       Row(
                         children: <Widget>[
                           _createCountButton(
