@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github/server.dart';
+import 'package:gitgo/util/date.dart';
 
 import '../common/emums.dart';
 
@@ -78,7 +79,7 @@ class ActivityListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(_event?.actor?.login ?? ""),
-          Text(_event?.createdAt?.toLocal().toString() ?? "")
+          Text(beforeNow(_event?.createdAt))
         ],
       ),
       subtitle: Row(
@@ -86,7 +87,7 @@ class ActivityListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           _eventIcon(_event?.type ?? ""),
-          Text(_event?.repo?.name ?? "")
+          Text(_event?.repo?.name ?? "", style: TextStyle(fontSize: 10),)
         ],
       ),
       onLongPress: () {
