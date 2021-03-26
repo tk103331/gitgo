@@ -12,7 +12,7 @@ class GistDetailPage extends StatefulWidget {
 
 class _GistDetailPageState extends State<GistDetailPage> {
   Gist _gist;
-  List<GistFile> _files = new List();
+  List<GistFile> _files = [];
   bool _starred = false;
   bool _loaded = false;
 
@@ -49,7 +49,7 @@ class _GistDetailPageState extends State<GistDetailPage> {
       appBar: AppBar(
         title: Text("Gist"),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Icon(_starred ? Icons.star : Icons.star_border),
             onPressed: () {
               if (_starred) {

@@ -12,7 +12,7 @@ class TopicPage extends StatefulWidget {
 }
 
 class _TopicPageState extends State<TopicPage> {
-  List<Topic> _topics = List();
+  List<Topic> _topics = [];
   bool _loaded = false;
 
   @override

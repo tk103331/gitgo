@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/common/emums.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../common/config.dart';
 
@@ -10,7 +9,7 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   List<Widget> _createColorItems(SettingModel model) {
-    List<Widget> items = List();
+    List<Widget> items = [];
     themeColors.forEach((color, name) {
       items.add(ListTile(
         leading: Container(
@@ -40,7 +39,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   List<Widget> _createPageItems(SettingModel model) {
-    List<Widget> items = List();
+    List<Widget> items = [];
     firstPages.forEach((page, name) {
       items.add(ListTile(
         title: Text(name),

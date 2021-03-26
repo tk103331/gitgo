@@ -24,17 +24,18 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
+  github: ^5.0.0
+  shared_preferences: ^2.0.5
+  flutter_markdown: ^0.6.1
+  flutter_syntax_view: ^3.2.2
+  scoped_model: ^1.1.0
+  oktoast: ^3.0.0
+  flutter_webview_plugin: ^0.3.11
+  url_launcher: ^6.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  github: ^5.0.0
-  shared_preferences: ^0.5.3
-  flutter_markdown: ^0.2.0
-  flutter_syntax_view: ^0.2.0
-  scoped_model: ^1.0.1
-  oktoast: ^2.1.8
-  flutter_webview_plugin: ^0.3.5
-  url_launcher: ^5.0.3
 
 
 # For information on the generic Dart part of this file, see the

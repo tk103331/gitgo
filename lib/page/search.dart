@@ -18,9 +18,9 @@ class _SearchPageState extends State<SearchPage>
   TabController _tabController;
 
   bool _repoLoaded = true;
-  List<Repository> _repos = List();
+  List<Repository> _repos = [];
   bool _userLoaded = true;
-  List<User> _users = List();
+  List<User> _users = [];
   TextEditingController _textEditingController = TextEditingController();
   bool _showActions = false;
 

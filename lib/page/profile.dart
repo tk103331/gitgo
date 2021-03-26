@@ -21,10 +21,10 @@ class _ProfilePageState extends State<ProfilePage>
   TabController _tabController;
 
   String _userName = "";
-  User _user = null;
-  List<Event> _events = List();
+  User _user;
+  List<Event> _events = [];
   bool _eventLoaded = false;
-  List<Repository> _repos = List();
+  List<Repository> _repos = [];
   bool _repoLoaded = false;
   bool _userLoaded = false;
   bool _isBookmarked = false;
@@ -79,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget _createCountButton(String name, int count, Function function) {
-    return FlatButton(
+    return TextButton(
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
         height: 60,

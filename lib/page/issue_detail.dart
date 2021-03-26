@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gitgo/api/base.dart';
 import 'package:gitgo/common/emums.dart';
 import 'package:github/server.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -21,7 +20,6 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
     super.didChangeDependencies();
   }
 
-  void _loadData() {}
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
                         height: 32,
                         width: 32,
                       ),
-                      FlatButton(
+                      TextButton(
                         child: Text(
                           _issue?.user?.login ?? "",
                           style:

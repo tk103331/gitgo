@@ -10,11 +10,11 @@ import '../widget/drawer.dart';
 import 'emums.dart';
 
 String appTitle = "Git Go!";
-CurrentUser currentUser = null;
+CurrentUser currentUser;
 const Widget MainDrawer = const NavDrawer();
-SharedPreferences sharedPreferences = null;
+SharedPreferences sharedPreferences;
 SettingModel settingModel = new SettingModel();
-List<Bookmark> bookmarks = List();
+List<Bookmark> bookmarks = List.empty();
 
 void loadSharedPreferences() async {
   sharedPreferences = await SharedPreferences.getInstance();

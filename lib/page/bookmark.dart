@@ -12,7 +12,7 @@ class BookmarkPage extends StatefulWidget {
 }
 
 class _BookmarkPageState extends State<BookmarkPage> {
-  List<Bookmark> _bookmarks = new List();
+  List<Bookmark> _bookmarks = [];
 
   @override
   void initState() {

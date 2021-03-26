@@ -26,7 +26,7 @@ SearchResult<T> _fromJson<T>(SearchResult<T> result, Map<String, dynamic> input,
 class TopicResult extends SearchResult<Topic> {
   static TopicResult fromJson(Map<String, dynamic> input) {
     SearchResult result = TopicResult();
-    result.items = List<Topic>();
+    result.items = [];
     return _fromJson(result, input, Topic.fromJson);
   }
 }
@@ -34,7 +34,7 @@ class TopicResult extends SearchResult<Topic> {
 class IssueResult extends SearchResult<Issue> {
   static IssueResult fromJson(Map<String, dynamic> input) {
     SearchResult result = IssueResult();
-    result.items = List<Issue>();
+    result.items = [];
     return _fromJson(result, input, Issue.fromJSON);
   }
 }

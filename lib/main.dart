@@ -4,7 +4,6 @@ import 'package:oktoast/oktoast.dart';
 
 import 'api/auth.dart';
 import 'common/config.dart';
-import 'common/emums.dart';
 import 'common/route.dart';
 import 'page/login.dart';
 import 'page/start.dart';

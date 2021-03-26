@@ -5,7 +5,7 @@ import 'package:gitgo/common/emums.dart';
 import 'package:github/server.dart';
 
 class GistPage extends StatefulWidget {
-  Gists _gists;
+  final Gists _gists;
 
   GistPage(this._gists);
 
@@ -15,8 +15,8 @@ class GistPage extends StatefulWidget {
 
 class _GistPageState extends State<GistPage> {
   Gists _gistsType;
-  List<Gist> _gists = new List();
-  bool _loaded = false;
+  List<Gist> _gists = [];
+  
   String _user = "";
 
   _GistPageState(this._gistsType);
@@ -32,7 +32,7 @@ class _GistPageState extends State<GistPage> {
     setState(() {
       _gists.clear();
     });
-    List<Gist> list = List();
+    List<Gist> list = [];
 
     switch (_gistsType) {
       case Gists.Mine:

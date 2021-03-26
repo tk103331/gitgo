@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/auth.dart';
 import '../common/config.dart';
-import '../common/emums.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -71,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 ButtonBar(
                   children: <Widget>[
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text("登陆"),
                       onPressed: () {
                         _login(context);

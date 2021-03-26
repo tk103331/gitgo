@@ -25,9 +25,9 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   TabController _tabController;
   github.RepositorySlug _repoSlug;
   github.Repository _repo;
-  List<github.GitHubFile> _files = List();
-  List<github.Event> _events = List();
-  List<github.RepositoryCommit> _commits = List();
+  List<github.GitHubFile> _files = [];
+  List<github.Event> _events = [];
+  List<github.RepositoryCommit> _commits = [];
   String _readme;
   String _path = "";
   bool _fileLoaded = false;
@@ -86,7 +86,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   }
 
   void _listFiles() async {
-    List<github.GitHubFile> files = new List();
+    List<github.GitHubFile> files = [];
     try {
       var contents =
           await defaultClient.repositories.getContents(_repo.slug(), _path);
@@ -293,7 +293,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
   }
 
   Widget _createCountButton(String name, int count, Function function) {
-    return FlatButton(
+    return TextButton(
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
         height: 50,
@@ -414,7 +414,7 @@ class _RepoDetailPageState extends State<RepoDetailPage>
                 child: Card(
               child: Markdown(
                 data: _readme ?? "",
-                onTapLink: (href) {
+                onTapLink: (text, href, title) {
                   _handleTabLink(href);
                 },
               ),

@@ -16,7 +16,7 @@ class _UserPageState extends State<UserPage> {
 
   String _title = "";
   String _subtitle = "";
-  List<User> _users = List();
+  List<User> _users = [];
   RepositorySlug _repoSlug;
   String _userName;
   bool _loaded = false;
@@ -41,7 +41,7 @@ class _UserPageState extends State<UserPage> {
   }
 
   void _loadData() async {
-    List<User> list = List();
+    List<User> list = [];
     switch (_type) {
       case Users.Follower:
         setState(() {

@@ -11,7 +11,7 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  List<github.Notification> _notifications = new List();
+  List<github.Notification> _notifications = [];
   bool _loaded = false;
 
   @override

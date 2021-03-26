@@ -18,7 +18,7 @@ class RepositoryPage extends StatefulWidget {
 }
 
 class _RepositoryPageState extends State<RepositoryPage> {
-  List<github.Repository> _repositories = new List();
+  List<github.Repository> _repositories = [];
   Repos _repos = Repos.Mine;
   Widget _title = Text("我的仓库");
   bool _loaded = false;

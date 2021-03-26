@@ -13,7 +13,7 @@ class ActivityPage extends StatefulWidget {
 
 class _ActivityPageState extends State<ActivityPage> {
   bool _loaded = false;
-  List<Event> _events = new List();
+  List<Event> _events = [];
 
   @override
   void initState() {

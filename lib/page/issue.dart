@@ -14,8 +14,8 @@ class IssuePage extends StatefulWidget {
 
 class _IssuePageState extends State<IssuePage>
     with SingleTickerProviderStateMixin {
-  List<github.Issue> _openedIssues = new List();
-  List<github.Issue> _closedIssues = new List();
+  List<github.Issue> _openedIssues = [];
+  List<github.Issue> _closedIssues = [];
   bool _openedLoaded = false;
   bool _closedLoaded = false;
   TabController _tabController;
